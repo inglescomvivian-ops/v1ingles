@@ -65,6 +65,17 @@
     position:relative;
   }
 
+  /* On an actual phone screen, drop the floating-card look and let the
+     quiz fill the whole viewport — no letterboxing above/below the stage.
+     The centered "phone mockup" presentation above is kept for desktop preview. */
+  @media (max-width:560px){
+    .outer{ padding:0; }
+    .stage{
+      width:100vw; height:100dvh; max-height:none; aspect-ratio:auto;
+      border-radius:0; box-shadow:none;
+    }
+  }
+
   .stage-top{
     flex:none; padding:14px 14px 10px; display:flex; flex-direction:column; gap:10px;
   }
@@ -105,6 +116,23 @@
   .lvl-C1{ color:var(--bad); background:var(--bad-bg); border-color:rgba(255,107,107,.35); }
 
   /* ---------- intro ---------- */
+  /* ---------- access gate (demo) ---------- */
+  #screen-gate{ min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:24px 6px; }
+  .gate-icon{
+    width:52px; height:52px; border-radius:16px; background:var(--card-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color:var(--accent); margin-bottom:2px;
+  }
+  .gate-icon svg{ width:24px; height:24px; }
+  .gate-title{ font-size:20px; margin:0; }
+  .gate-sub{ margin:0 0 4px; color:var(--text-dim); font-size:13.5px; max-width:30ch; }
+  .gate-input{
+    width:100%; padding:13px 16px; border-radius:12px;
+    border:1.5px solid var(--line-strong); background:var(--card-2); color:var(--text);
+    font-family:'IBM Plex Mono'; font-size:14px; text-align:center;
+  }
+  .gate-input:focus{ outline:none; border-color:var(--accent); }
+  .gate-error{ margin:0; color:var(--bad); font-size:12.5px; }
+
   #screen-intro{ min-height:100%; display:flex; flex-direction:column; justify-content:center; gap:15px; padding-top:14px; padding-bottom:14px; }
   .mentor-header{ display:flex; align-items:center; gap:10px; }
   .mentor-avatar{
@@ -114,11 +142,19 @@
   }
   .mentor-name{ font-family:'Sora'; font-weight:700; font-size:13.5px; color:var(--text); line-height:1.25; }
   .mentor-role{ font-size:11px; color:var(--text-faint); line-height:1.25; }
+  .badge-icon-row{ display:flex; align-items:center; gap:11px; }
   .badge-icon{
-    width:44px; height:44px; border-radius:14px; background:var(--card-2);
+    position:relative; flex:none; width:44px; height:44px; border-radius:14px; background:var(--card-2);
     border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
   }
   .badge-icon svg{ width:20px; height:20px; color:var(--accent); }
+  .badge-icon-tag{
+    position:absolute; right:-7px; bottom:-6px;
+    font-family:'IBM Plex Mono'; font-weight:700; font-size:9px; letter-spacing:.02em;
+    color:#08101F; background:var(--accent-2);
+    padding:2px 5px; border-radius:6px; border:2px solid var(--card);
+  }
+  .badge-icon-label{ font-family:'Sora'; font-weight:700; font-size:14.5px; color:var(--text); }
   .eyebrow{ font-family:'IBM Plex Mono'; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-2); font-weight:600; margin:0 0 6px; }
   #screen-intro h1{ font-size:24px; margin:0 0 8px; }
   .stat-strip{ display:flex; gap:8px; }
@@ -157,7 +193,7 @@
   .best-line{ font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); text-align:center; }
 
   /* ---------- quiz ---------- */
-  #screen-quiz{ min-height:100%; display:flex; flex-direction:column; padding-top:8px; }
+  #screen-quiz{ min-height:100%; display:flex; flex-direction:column; justify-content:center; gap:32px; padding-top:8px; padding-bottom:8px; }
   .qhead{ display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
   .qtag{
     display:inline-flex; align-self:flex-start;
@@ -189,13 +225,13 @@
   .opt.correct .letter{ background:var(--good); border-color:var(--good); color:#06140D; }
   .opt.wrong{ border-color:var(--bad); background:var(--bad-bg); }
   .opt.wrong .letter{ background:var(--bad); border-color:var(--bad); color:#210404; }
-  .qspacer{ flex:1; }
+  .qnav{ display:flex; flex-direction:column; gap:8px; }
+  .qcount{ text-align:center; font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); }
 
   .stage-bottom{
     flex:none; padding:12px 22px 18px; display:flex; flex-direction:column; gap:8px;
     background:linear-gradient(to top, var(--card) 60%, transparent);
   }
-  .qcount{ text-align:center; font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); }
 
   /* ---------- review ---------- */
   #screen-review{ padding-top:16px; }
@@ -235,15 +271,44 @@
   .score-ring .num{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
   .score-ring .num .n{ font-family:'Sora'; font-weight:800; font-size:24px; }
   .score-ring .num .d{ font-family:'IBM Plex Mono'; font-size:10px; color:var(--text-faint); }
-  .score-hero h2{ font-size:18px; margin:0; }
-  .score-hero p{ margin:0; color:var(--text-dim); font-size:13.5px; max-width:32ch; }
+  .score-hero h2{ font-size:19px; margin:0; }
 
-  .breakdown{ display:flex; flex-direction:column; gap:7px; margin-bottom:20px; }
+  /* ---------- performance scale ---------- */
+  .perf-scale{ margin:2px 0 24px; display:flex; flex-direction:column; gap:9px; }
+  .perf-track{
+    position:relative; height:10px; border-radius:999px;
+    background:var(--card-2); border:1px solid var(--line); overflow:visible;
+  }
+  .perf-fill{
+    position:absolute; top:0; left:0; height:100%; width:0%;
+    border-radius:999px; background:var(--accent);
+    transition:width .9s cubic-bezier(.2,.8,.2,1), background-color .5s ease;
+  }
+  .perf-tick{ position:absolute; top:-2px; bottom:-2px; width:1px; background:var(--bg-outer); opacity:.7; }
+  .perf-marker{
+    position:absolute; top:50%; left:0%; width:26px; height:26px; margin-left:-13px;
+    transform:translateY(-50%); transition:left .9s cubic-bezier(.2,.8,.2,1);
+    display:flex; align-items:center; justify-content:center; border-radius:50%;
+    background:var(--card); border:2px solid var(--text); box-shadow:0 4px 12px rgba(0,0,0,.5);
+  }
+  .perf-marker svg{ width:13px; height:13px; color:var(--text); }
+  .perf-labels{ display:flex; justify-content:space-between; font-family:'IBM Plex Mono'; font-size:9px; font-weight:600; color:var(--text-faint); text-transform:uppercase; letter-spacing:.03em; }
+  .perf-callout{ margin:2px 2px 0; font-size:13px; color:var(--text-dim); text-align:center; line-height:1.45; }
+
+  .section-title{ font-family:'Sora'; font-weight:700; font-size:14.5px; margin:0 0 12px; color:var(--text); }
+
+  .breakdown{ display:flex; flex-direction:column; gap:9px; margin-bottom:22px; }
+  .bd-flag{
+    display:inline-flex; align-self:flex-start; margin:0 0 5px 2px;
+    font-family:'IBM Plex Mono'; font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent-2); background:rgba(242,183,5,.14); border:1px solid rgba(242,183,5,.35);
+    padding:3px 8px; border-radius:999px;
+  }
   .bd-row{ display:flex; align-items:center; gap:8px; font-size:12px; }
   .bd-row .lbl{ flex:0 0 118px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .bd-track{ flex:1; height:7px; border-radius:99px; background:var(--card-2); border:1px solid var(--line); overflow:hidden; }
-  .bd-fill{ height:100%; border-radius:99px; background:var(--accent); }
-  .bd-fill.bad{ background:var(--bad); }
+  /* track = wrong answers (red), fill = correct answers (green) — a right/wrong split bar */
+  .bd-track{ flex:1; height:7px; border-radius:99px; background:var(--bad); border:1px solid #000; overflow:hidden; }
+  .bd-fill{ display:block; height:100%; border-radius:99px; background:var(--good); }
   .bd-val{ flex:0 0 26px; text-align:right; font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); }
 
   .review h3{ font-size:14.5px; margin:0 0 12px; }
@@ -295,8 +360,20 @@
 
     <div class="stage-body">
 
+      <!-- ============ ACCESS GATE (demo — simple client-side password) ============ -->
+      <section id="screen-gate">
+        <div class="gate-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h1 class="gate-title">Acesso restrito</h1>
+        <p class="gate-sub">Digite a senha que a Vivian passou pra você para entrar na Mentoria V1.</p>
+        <input type="password" id="gatePassword" class="gate-input" placeholder="Senha" autocomplete="off">
+        <p class="gate-error" id="gateError" hidden>Senha incorreta. Tente de novo.</p>
+        <button class="btn" id="btnGateEnter">Entrar</button>
+      </section>
+
       <!-- ============ INTRO ============ -->
-      <section id="screen-intro">
+      <section id="screen-intro" hidden>
         <div class="mentor-header">
           <div class="mentor-avatar">VB</div>
           <div>
@@ -304,17 +381,21 @@
             <div class="mentor-role">Teacher Mentora de Comissários de Voo</div>
           </div>
         </div>
-        <div class="badge-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8.5-2.6V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.6L22 16z" fill="currentColor" stroke="none"/></svg>
+        <div class="badge-icon-row">
+          <div class="badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8.5-2.6V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.6L22 16z" fill="currentColor" stroke="none"/></svg>
+            <span class="badge-icon-tag">V1</span>
+          </div>
+          <span class="badge-icon-label">Mentoria V1</span>
         </div>
         <div>
-          <p class="eyebrow">Rodada rápida · níveis A2 a C1</p>
+          <p class="eyebrow">Simulado de inglês estilo Gupy · níveis A2 a C1</p>
           <h1>Estrutura &amp; Vocabulário</h1>
         </div>
         <div class="stat-strip">
           <div class="stat"><div class="v mono">12</div><div class="k">Perguntas</div></div>
           <div class="stat"><div class="v mono" id="statTime">0:45</div><div class="k">Por questão</div></div>
-          <div class="stat"><div class="v mono">112</div><div class="k">Banco total</div></div>
+          <div class="stat"><div class="v mono" id="statTotalTime">9:00</div><div class="k">Tempo total</div></div>
         </div>
         <div class="mode-picker">
           <div class="mode-label">Modo de resolução</div>
@@ -333,10 +414,15 @@
 
       <!-- ============ QUIZ (timed, forward only) ============ -->
       <section id="screen-quiz" hidden>
-        <div class="qhead"><span class="lvl-badge" id="qLevel"></span><span class="qtag" id="qTag"></span></div>
-        <p class="qstem" id="qStem"></p>
-        <div class="options" id="qOptions"></div>
-        <div class="qspacer"></div>
+        <div>
+          <div class="qhead"><span class="lvl-badge" id="qLevel"></span><span class="qtag" id="qTag"></span></div>
+          <p class="qstem" id="qStem"></p>
+          <div class="options" id="qOptions"></div>
+        </div>
+        <div class="qnav">
+          <div class="qcount mono" id="qCount"></div>
+          <button class="btn" id="btnNext">Continuar →</button>
+        </div>
       </section>
 
       <!-- ============ REVIEW (untimed, scroll through all 12 before submit) ============ -->
@@ -358,8 +444,25 @@
             <div class="num"><span class="n" id="scoreN">0/12</span><span class="d">ACERTOS</span></div>
           </div>
           <h2 id="scoreTitle">Resultado</h2>
-          <p id="scoreMsg"></p>
         </div>
+
+        <div class="perf-scale">
+          <div class="perf-track" id="perfTrack">
+            <div class="perf-fill" id="perfFill"></div>
+            <span class="perf-tick" style="left:40%"></span>
+            <span class="perf-tick" style="left:60%"></span>
+            <span class="perf-tick" style="left:80%"></span>
+            <div class="perf-marker" id="perfMarker">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 16v-2l-8.5-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8.5-2.6V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.6L22 16z"/></svg>
+            </div>
+          </div>
+          <div class="perf-labels">
+            <span>Em solo</span><span>Decolagem</span><span>Em rota</span><span>Cruzeiro</span>
+          </div>
+          <p class="perf-callout" id="perfCallout"></p>
+        </div>
+
+        <div class="section-title">Prioridades de revisão</div>
         <div class="breakdown" id="breakdown"></div>
         <div class="review">
           <h3>Gabarito comentado</h3>
@@ -369,11 +472,6 @@
         <footer class="credit">Vivian Bispo · Teacher Mentora de Comissários de Voo<br>Prática pessoal · estrutura e vocabulário</footer>
       </section>
 
-    </div>
-
-    <div class="stage-bottom" id="stageBottom" hidden>
-      <div class="qcount mono" id="qCount"></div>
-      <button class="btn" id="btnNext">Continuar →</button>
     </div>
 
     <div class="stage-bottom" id="stageBottomReview" hidden>
@@ -736,12 +834,13 @@
 
   var el = {};
   ["stage","stageTop","bars","qTimerVal","btnPause",
-   "screen-intro","btnStart","bestLine","statTime","modeOptions",
+   "screen-gate","gatePassword","gateError","btnGateEnter",
+   "screen-intro","btnStart","bestLine","statTime","statTotalTime","modeOptions",
    "screen-quiz","qLevel","qTag","qStem","qOptions",
    "screen-review","rCards","rAnsweredCount",
-   "stageBottom","qCount","btnNext",
+   "qCount","btnNext",
    "stageBottomReview","btnSubmit",
-   "screen-results","ringFg","scoreN","scoreTitle","scoreMsg","breakdown","reviewList","btnRetry"
+   "screen-results","ringFg","scoreN","scoreTitle","perfFill","perfMarker","perfCallout","breakdown","reviewList","btnRetry"
   ].forEach(function(id){ el[id]=document.getElementById(id); });
 
   function safeGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
@@ -760,9 +859,15 @@
     return '<span class="lvl-badge lvl-'+level+'">'+level+'</span>';
   }
 
+  function fmtMinSec(totalSeconds){
+    var m = Math.floor(totalSeconds/60), s = totalSeconds%60;
+    return m + ":" + (s<10?"0":"") + s;
+  }
+
   function setQuestionTime(seconds){
     QUESTION_TIME = seconds;
     el.statTime.textContent = "0:" + (seconds<10?"0":"") + seconds;
+    el.statTotalTime.textContent = fmtMinSec(seconds*12);
   }
 
   Array.prototype.forEach.call(el.modeOptions.children, function(btn){
@@ -777,7 +882,6 @@
     ["screen-intro","screen-quiz","screen-review","screen-results"].forEach(function(s){
       el[s].hidden = (s!==id);
     });
-    el.stageBottom.hidden = (id!=="screen-quiz");
     el.stageBottomReview.hidden = (id!=="screen-review");
     el.stageTop.hidden = (id!=="screen-quiz");
   }
@@ -928,12 +1032,33 @@
     var pct = correctCount/Q.length;
     el.ringFg.setAttribute("stroke-dashoffset", 314*(1-pct));
 
-    var title, msg;
-    if(pct>=0.83){ title="Excelente ritmo"; msg="Estrutura e vocabulário sob pressão de tempo, e você foi bem. Repita o quiz de vez em quando — o banco tem mais perguntas para sortear."; }
-    else if(pct>=0.5){ title="No caminho certo"; msg="Boa parte das regras já está sólida. Releia o gabarito abaixo com atenção aos itens errados."; }
-    else{ title="Vale mais treino"; msg=QUESTION_TIME+" segundos é pouco tempo — isso é normal no começo. Revise cada item abaixo com calma antes da próxima rodada."; }
-    el.scoreTitle.textContent = title;
-    el.scoreMsg.textContent = msg;
+    // Four-band performance scale — same score, framed as a flight progressing
+    // toward cruise altitude, so retaking the quiz reads as visible advancement.
+    var band;
+    if(pct<0.4){ band = { title:"Ainda em solo", color:"var(--bad)",
+      msg:"Ainda em solo — foque nas prioridades de revisão abaixo antes da próxima rodada." }; }
+    else if(pct<0.6){ band = { title:"Decolando", color:"var(--accent-2)",
+      msg:"Decolando! As bases já aparecem — repita os pontos abaixo pra ganhar altitude." }; }
+    else if(pct<0.8){ band = { title:"Em rota", color:"var(--accent)",
+      msg:"Em rota! Boa parte da estrutura já está sólida — ajuste os últimos detalhes." }; }
+    else{ band = { title:"Cruzeiro atingido", color:"var(--good)",
+      msg:"Cruzeiro atingido! Domínio sólido — repita de vez em quando pra manter o ritmo." }; }
+
+    el.scoreTitle.textContent = band.title;
+    el.ringFg.style.stroke = band.color;
+    el.perfCallout.textContent = band.msg;
+
+    var fillPct = pct*100;
+    var markerPct = Math.min(96, Math.max(4, fillPct));
+    el.perfFill.style.width = "0%";
+    el.perfMarker.style.left = "0%";
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        el.perfFill.style.width = fillPct + "%";
+        el.perfFill.style.background = band.color;
+        el.perfMarker.style.left = markerPct + "%";
+      });
+    });
 
     var byTag = {};
     Q.forEach(function(q,idx){
@@ -941,12 +1066,23 @@
       byTag[q.tag].total++;
       if(state.answers[idx]===q.correct) byTag[q.tag].ok++;
     });
+    // Weakest topic first, so the list itself points to what to study next.
+    var rows = Object.keys(byTag).map(function(tag){
+      var d = byTag[tag];
+      return { tag:tag, ok:d.ok, total:d.total, p:d.ok/d.total };
+    }).sort(function(a,b){ return a.p - b.p; });
+
     el.breakdown.innerHTML = "";
-    Object.keys(byTag).forEach(function(tag){
-      var d = byTag[tag], p = d.ok/d.total;
+    rows.forEach(function(r, idx){
+      if(idx===0 && r.p<1){
+        var flag = document.createElement("span");
+        flag.className = "bd-flag";
+        flag.textContent = "Comece por aqui";
+        el.breakdown.appendChild(flag);
+      }
       var row = document.createElement("div");
       row.className = "bd-row";
-      row.innerHTML = '<span class="lbl">'+tag+'</span><span class="bd-track"><span class="bd-fill'+(p<0.5?' bad':'')+'" style="width:'+(p*100)+'%"></span></span><span class="bd-val mono">'+d.ok+'/'+d.total+'</span>';
+      row.innerHTML = '<span class="lbl">'+r.tag+'</span><span class="bd-track"><span class="bd-fill" style="width:'+(r.p*100)+'%"></span></span><span class="bd-val mono">'+r.ok+'/'+r.total+'</span>';
       el.breakdown.appendChild(row);
     });
 
@@ -979,9 +1115,45 @@
     showScreen("screen-intro");
   });
 
+  setQuestionTime(QUESTION_TIME);
+
   (function initBest(){
     var best = safeGet("quiz_bordo_best");
     if(best!==null){ el.bestLine.hidden = false; el.bestLine.textContent = "Melhor resultado neste dispositivo: " + best + "/12"; }
+  })();
+
+  // ---------- access gate (demo) ----------
+  // NOTE: this is a simple client-side password, not real security — anyone who
+  // opens the page's source/devtools can read GATE_PASSWORD below. It only stops
+  // casual visitors from seeing the quiz, not a determined person. Change the
+  // password by editing the line below before publishing.
+  var GATE_PASSWORD = "mentoriaV12026!";
+
+  function unlockGate(){
+    safeSet("mentoria_v1_unlocked", "1");
+    el["screen-gate"].hidden = true;
+    el["screen-intro"].hidden = false;
+  }
+
+  function checkGatePassword(){
+    if(el.gatePassword.value.trim() === GATE_PASSWORD){
+      el.gateError.hidden = true;
+      unlockGate();
+    } else {
+      el.gateError.hidden = false;
+      el.gatePassword.value = "";
+      el.gatePassword.focus();
+    }
+  }
+
+  el.btnGateEnter.addEventListener("click", checkGatePassword);
+  el.gatePassword.addEventListener("keydown", function(e){ if(e.key==="Enter") checkGatePassword(); });
+
+  (function initGate(){
+    if(safeGet("mentoria_v1_unlocked") === "1"){
+      el["screen-gate"].hidden = true;
+      el["screen-intro"].hidden = false;
+    }
   })();
 
 })();

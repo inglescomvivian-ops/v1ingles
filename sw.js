@@ -1,7 +1,7 @@
 // Service worker for "Mentoria V1 - Vivian Bispo" — cache-first for offline use.
 // Bump CACHE_NAME whenever index.html (or the question bank inside it) changes,
 // so returning users pick up the new version instead of a stale cached copy.
-var CACHE_NAME = "mentoria-v1-vivian-bispo-v2";
+var CACHE_NAME = "mentoria-v1-vivian-bispo-v3";
 var ASSETS = [
   "./",
   "./index.html",
