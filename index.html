@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mentoria V1 - Vivian Bispo</title>
+<meta name="description" content="Prática cronometrada de estrutura e vocabulário em inglês, com Vivian Bispo — Teacher Mentora de Comissários de Voo.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#05070C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mentoria V1">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png" type="image/png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --bg-outer:#05070C;
+    --card:#0E1626;
+    --card-2:#121D33;
+    --text:#F3F6FF;
+    --text-dim:#A9B4CE;
+    --text-faint:#6E7A99;
+    --accent:#4C8DFF;
+    --accent-ink:#D8E6FF;
+    --accent-2:#F2B705;
+    --good:#38C793;
+    --good-bg:rgba(56,199,147,.14);
+    --bad:#FF6B6B;
+    --bad-bg:rgba(255,107,107,.14);
+    --line:rgba(255,255,255,.12);
+    --line-strong:rgba(255,255,255,.24);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; height:100%;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 600px at 50% -8%, #16274D 0%, transparent 60%),
+      var(--bg-outer);
+    color:var(--text);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    line-height:1.5;
+    min-height:100dvh;
+  }
+  h1,h2,h3,.display{ font-family:'Sora', system-ui, sans-serif; text-wrap:balance; letter-spacing:-.01em; }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+
+  .outer{
+    min-height:100dvh; display:flex; align-items:center; justify-content:center;
+    padding:28px 14px;
+  }
+
+  .stage{
+    width:min(94vw, 430px, calc(100dvh * 9 / 16 - 20px));
+    aspect-ratio:9/16;
+    max-height:900px;
+    background:var(--card);
+    border-radius:30px;
+    box-shadow:0 44px 110px -40px rgba(0,0,0,.85), 0 0 0 1px var(--line);
+    display:flex; flex-direction:column;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .stage-top{
+    flex:none; padding:14px 14px 10px; display:flex; flex-direction:column; gap:10px;
+  }
+  .bars{ display:flex; gap:4px; }
+  .bar{ flex:1; height:3px; border-radius:99px; background:rgba(255,255,255,.22); overflow:hidden; position:relative; }
+  .bar .fill{ position:absolute; inset:0; width:0%; background:var(--accent-2); border-radius:99px; }
+  .bar.done .fill{ width:100% !important; background:var(--text-dim); }
+  .top-row{ display:flex; align-items:center; justify-content:space-between; }
+  .brand{ display:flex; align-items:center; gap:7px; font-family:'Sora'; font-weight:700; font-size:11px; letter-spacing:.02em; color:var(--text-dim); min-width:0; }
+  .brand .plane{ flex:none; width:14px; height:14px; color:var(--accent); }
+  .brand .brand-text{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .timeleft{ display:flex; align-items:center; gap:8px; }
+  .timeleft .t{ font-size:13px; font-weight:600; color:var(--text-dim); }
+  .timeleft .t.urgent{ color:var(--bad); }
+  .iconbtn{
+    appearance:none; border:none; background:rgba(255,255,255,.08); color:var(--text-dim);
+    width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .iconbtn svg{ width:12px; height:12px; }
+  .iconbtn:hover{ background:rgba(255,255,255,.16); }
+
+  .stage-body{ flex:1; overflow-y:auto; padding:0 22px 18px; scrollbar-width:thin; }
+  .stage-body::-webkit-scrollbar{ width:4px; }
+  .stage-body::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:99px; }
+
+  [hidden]{ display:none !important; }
+
+  /* ---------- level badges (shared) ---------- */
+  .lvl-badge{
+    flex:none; display:inline-flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono'; font-size:10px; font-weight:700; letter-spacing:.02em;
+    padding:4px 7px; border-radius:7px; border:1px solid transparent;
+  }
+  .lvl-A2{ color:var(--good); background:var(--good-bg); border-color:rgba(56,199,147,.35); }
+  .lvl-B1{ color:var(--accent-ink); background:rgba(76,141,255,.16); border-color:rgba(76,141,255,.35); }
+  .lvl-B2{ color:var(--accent-2); background:rgba(242,183,5,.14); border-color:rgba(242,183,5,.35); }
+  .lvl-C1{ color:var(--bad); background:var(--bad-bg); border-color:rgba(255,107,107,.35); }
+
+  /* ---------- intro ---------- */
+  #screen-intro{ min-height:100%; display:flex; flex-direction:column; justify-content:center; gap:15px; padding-top:14px; padding-bottom:14px; }
+  .mentor-header{ display:flex; align-items:center; gap:10px; }
+  .mentor-avatar{
+    flex:none; width:36px; height:36px; border-radius:50%; background:var(--accent);
+    color:#08101F; font-family:'Sora'; font-weight:700; font-size:12.5px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .mentor-name{ font-family:'Sora'; font-weight:700; font-size:13.5px; color:var(--text); line-height:1.25; }
+  .mentor-role{ font-size:11px; color:var(--text-faint); line-height:1.25; }
+  .badge-icon{
+    width:44px; height:44px; border-radius:14px; background:var(--card-2);
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  }
+  .badge-icon svg{ width:20px; height:20px; color:var(--accent); }
+  .eyebrow{ font-family:'IBM Plex Mono'; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-2); font-weight:600; margin:0 0 6px; }
+  #screen-intro h1{ font-size:24px; margin:0 0 8px; }
+  .stat-strip{ display:flex; gap:8px; }
+  .stat{ flex:1; background:var(--card-2); border:1px solid var(--line); border-radius:12px; padding:9px 8px; text-align:center; }
+  .stat .v{ font-family:'IBM Plex Mono'; font-weight:600; font-size:14px; color:var(--text); }
+  .stat .k{ font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+
+  .mode-picker{ display:flex; flex-direction:column; gap:7px; }
+  .mode-label{ font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.07em; }
+  .mode-options{ display:flex; gap:8px; }
+  .mode-btn{
+    flex:1; appearance:none; cursor:pointer; text-align:center;
+    padding:10px 6px; border-radius:12px; border:1.5px solid var(--line-strong);
+    background:var(--card-2); color:var(--text-faint);
+    display:flex; flex-direction:column; gap:2px;
+    transition:border-color .12s ease, color .12s ease, background .12s ease;
+  }
+  .mode-btn .mode-name{ font-family:'Sora'; font-weight:700; font-size:13.5px; }
+  .mode-btn .mode-time{ font-size:10.5px; }
+  .mode-btn.active{ border-color:var(--accent); color:var(--accent-ink); background:rgba(76,141,255,.14); }
+  .mode-btn.active .mode-name{ color:var(--text); }
+
+  .btn{
+    appearance:none; border:none; cursor:pointer; width:100%;
+    font-family:'Sora'; font-weight:700; font-size:15px;
+    padding:15px 20px; border-radius:14px;
+    background:var(--accent); color:#08101F;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:filter .12s ease, transform .12s ease;
+  }
+  .btn:hover{ filter:brightness(1.08); }
+  .btn:active{ transform:translateY(1px); }
+  .btn:focus-visible{ outline:3px solid var(--accent-2); outline-offset:2px; }
+  .btn.ghost{ background:var(--card-2); color:var(--text); border:1.5px solid var(--line-strong); }
+  .btn[disabled]{ opacity:.4; cursor:not-allowed; }
+  .best-line{ font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); text-align:center; }
+
+  /* ---------- quiz ---------- */
+  #screen-quiz{ min-height:100%; display:flex; flex-direction:column; padding-top:8px; }
+  .qhead{ display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .qtag{
+    display:inline-flex; align-self:flex-start;
+    font-family:'IBM Plex Mono'; font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-ink); background:rgba(76,141,255,.16); border:1px solid rgba(76,141,255,.3);
+    padding:5px 10px; border-radius:999px;
+  }
+  .qstem{ font-size:18px; font-weight:600; margin:0 0 20px; line-height:1.42; font-family:'Sora'; text-wrap:balance; }
+  .qstem b{ color:var(--accent-ink); }
+  .options{ display:flex; flex-direction:column; gap:9px; }
+  .opt{
+    display:flex; align-items:center; gap:11px;
+    border:1.5px solid var(--line-strong); border-radius:14px;
+    padding:12px 14px; cursor:pointer; background:var(--card-2);
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opt:hover{ border-color:var(--accent); }
+  .opt input{ display:none; }
+  .letter{
+    flex:none; width:24px;height:24px;border-radius:8px;
+    background:rgba(255,255,255,.06); border:1px solid var(--line-strong);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono'; font-size:11.5px; font-weight:600; color:var(--text-dim);
+  }
+  .opt.selected{ border-color:var(--accent); background:rgba(76,141,255,.14); }
+  .opt.selected .letter{ background:var(--accent); border-color:var(--accent); color:#08101F; }
+  .opt .label{ font-size:13.5px; color:var(--text); }
+  .opt.correct{ border-color:var(--good); background:var(--good-bg); }
+  .opt.correct .letter{ background:var(--good); border-color:var(--good); color:#06140D; }
+  .opt.wrong{ border-color:var(--bad); background:var(--bad-bg); }
+  .opt.wrong .letter{ background:var(--bad); border-color:var(--bad); color:#210404; }
+  .qspacer{ flex:1; }
+
+  .stage-bottom{
+    flex:none; padding:12px 22px 18px; display:flex; flex-direction:column; gap:8px;
+    background:linear-gradient(to top, var(--card) 60%, transparent);
+  }
+  .qcount{ text-align:center; font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); }
+
+  /* ---------- review ---------- */
+  #screen-review{ padding-top:16px; }
+  #screen-review h2{ font-size:18px; margin:0 0 4px; }
+  #screen-review > p.sub{ margin:0 0 14px; color:var(--text-dim); font-size:13px; }
+  .rsummary{
+    position:sticky; top:-1px; z-index:2;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; margin-bottom:14px; font-size:12.5px; color:var(--text-dim);
+  }
+  .rsummary b{ color:var(--text); font-family:'IBM Plex Mono'; }
+  .rcards{ display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
+  .review-card{
+    background:var(--card-2); border:1px solid var(--line); border-radius:16px; padding:16px;
+  }
+  .rc-head{ display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+  .rc-num{ flex:none; font-family:'IBM Plex Mono'; font-size:11px; font-weight:600; color:var(--text-faint); }
+  .rc-status{
+    margin-left:auto; flex:none; font-family:'IBM Plex Mono'; font-size:9.5px; font-weight:600;
+    padding:4px 9px; border-radius:999px;
+  }
+  .rc-status.ok{ color:var(--accent-ink); background:rgba(76,141,255,.16); }
+  .rc-status.pending{ color:var(--accent-2); background:rgba(242,183,5,.14); }
+  .review-card .qstem{ font-size:15.5px; margin-bottom:14px; }
+  .review-card .options{ gap:8px; }
+  .review-card .opt{ padding:10px 12px; }
+  .review-card .label{ font-size:13px; }
+
+  /* ---------- results ---------- */
+  #screen-results{ padding-top:14px; padding-bottom:6px; }
+  .score-hero{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; padding:6px 0 22px; }
+  .score-ring{ position:relative; width:112px; height:112px; }
+  .score-ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
+  .score-ring .bg{ fill:none; stroke:var(--line); stroke-width:9; }
+  .score-ring .fg{ fill:none; stroke:var(--accent); stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset .7s ease; }
+  .score-ring .num{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .score-ring .num .n{ font-family:'Sora'; font-weight:800; font-size:24px; }
+  .score-ring .num .d{ font-family:'IBM Plex Mono'; font-size:10px; color:var(--text-faint); }
+  .score-hero h2{ font-size:18px; margin:0; }
+  .score-hero p{ margin:0; color:var(--text-dim); font-size:13.5px; max-width:32ch; }
+
+  .breakdown{ display:flex; flex-direction:column; gap:7px; margin-bottom:20px; }
+  .bd-row{ display:flex; align-items:center; gap:8px; font-size:12px; }
+  .bd-row .lbl{ flex:0 0 118px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bd-track{ flex:1; height:7px; border-radius:99px; background:var(--card-2); border:1px solid var(--line); overflow:hidden; }
+  .bd-fill{ height:100%; border-radius:99px; background:var(--accent); }
+  .bd-fill.bad{ background:var(--bad); }
+  .bd-val{ flex:0 0 26px; text-align:right; font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-faint); }
+
+  .review h3{ font-size:14.5px; margin:0 0 12px; }
+  .rcard{
+    background:var(--card-2); border:1px solid var(--line); border-radius:14px;
+    padding:14px; margin-bottom:10px;
+  }
+  .rmeta{ display:flex; align-items:center; gap:6px; margin-bottom:9px; flex-wrap:wrap; }
+  .rtag{ font-family:'IBM Plex Mono'; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em; }
+  .rstatus{ margin-left:auto; font-family:'IBM Plex Mono'; font-size:10px; font-weight:600; padding:3px 8px; border-radius:999px; }
+  .rstatus.ok{ color:var(--good); background:var(--good-bg); }
+  .rstatus.no{ color:var(--bad); background:var(--bad-bg); }
+  .rstem{ font-size:13.5px; margin:0 0 10px; font-weight:500; }
+  .roption{ display:flex; align-items:center; gap:8px; font-size:12.5px; padding:6px 0; color:var(--text-dim); }
+  .roption .letter{ width:19px;height:19px;font-size:10px; }
+  .roption.correct{ color:var(--good); }
+  .roption.correct .letter{ background:var(--good); border-color:var(--good); color:#06140D; }
+  .roption.wrong{ color:var(--bad); }
+  .roption.wrong .letter{ background:var(--bad); border-color:var(--bad); color:#210404; }
+  .rwhy{ margin-top:8px; font-size:12px; color:var(--text-dim); border-top:1px solid var(--line); padding-top:8px; }
+  .rwhy b{ color:var(--text); }
+
+  footer.credit{ text-align:center; color:var(--text-faint); font-size:11px; margin-top:18px; line-height:1.5; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bar .fill, .score-ring .fg{ transition:none; }
+  }
+</style>
+</head>
+<body>
+<div class="outer">
+  <div class="stage" id="stage">
+
+    <div class="stage-top" id="stageTop" hidden>
+      <div class="bars" id="bars"></div>
+      <div class="top-row">
+        <div class="brand">
+          <svg class="plane" viewBox="0 0 24 24" fill="currentColor"><path d="M22 16v-2l-8.5-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8.5-2.6V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.6L22 16z"/></svg>
+          <span class="brand-text">MENTORIA V1 - VIVIAN BISPO</span>
+        </div>
+        <div class="timeleft">
+          <span class="t mono" id="qTimerVal">0:45</span>
+          <button class="iconbtn" id="btnPause" aria-label="Pausar">
+            <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-body">
+
+      <!-- ============ INTRO ============ -->
+      <section id="screen-intro">
+        <div class="mentor-header">
+          <div class="mentor-avatar">VB</div>
+          <div>
+            <div class="mentor-name">Vivian Bispo</div>
+            <div class="mentor-role">Teacher Mentora de Comissários de Voo</div>
+          </div>
+        </div>
+        <div class="badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8.5-2.6V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.6L22 16z" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div>
+          <p class="eyebrow">Rodada rápida · níveis A2 a C1</p>
+          <h1>Estrutura &amp; Vocabulário</h1>
+        </div>
+        <div class="stat-strip">
+          <div class="stat"><div class="v mono">12</div><div class="k">Perguntas</div></div>
+          <div class="stat"><div class="v mono" id="statTime">0:45</div><div class="k">Por questão</div></div>
+          <div class="stat"><div class="v mono">112</div><div class="k">Banco total</div></div>
+        </div>
+        <div class="mode-picker">
+          <div class="mode-label">Modo de resolução</div>
+          <div class="mode-options" id="modeOptions">
+            <button type="button" class="mode-btn active" data-mode="facil" data-time="45">
+              <span class="mode-name">Fácil</span><span class="mode-time mono">45s por questão</span>
+            </button>
+            <button type="button" class="mode-btn" data-mode="v1" data-time="30">
+              <span class="mode-name">V1</span><span class="mode-time mono">30s por questão</span>
+            </button>
+          </div>
+        </div>
+        <button class="btn" id="btnStart">Começar</button>
+        <div class="best-line" id="bestLine" hidden></div>
+      </section>
+
+      <!-- ============ QUIZ (timed, forward only) ============ -->
+      <section id="screen-quiz" hidden>
+        <div class="qhead"><span class="lvl-badge" id="qLevel"></span><span class="qtag" id="qTag"></span></div>
+        <p class="qstem" id="qStem"></p>
+        <div class="options" id="qOptions"></div>
+        <div class="qspacer"></div>
+      </section>
+
+      <!-- ============ REVIEW (untimed, scroll through all 12 before submit) ============ -->
+      <section id="screen-review" hidden>
+        <h2>Revisão</h2>
+        <p class="sub">Role e confira todas as respostas. Toque numa alternativa para trocá-la.</p>
+        <div class="rsummary"><span>Respondidas</span><b id="rAnsweredCount">0/12</b></div>
+        <div class="rcards" id="rCards"></div>
+      </section>
+
+      <!-- ============ RESULTS ============ -->
+      <section id="screen-results" hidden>
+        <div class="score-hero">
+          <div class="score-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="bg" cx="60" cy="60" r="50"/>
+              <circle class="fg" id="ringFg" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="num"><span class="n" id="scoreN">0/12</span><span class="d">ACERTOS</span></div>
+          </div>
+          <h2 id="scoreTitle">Resultado</h2>
+          <p id="scoreMsg"></p>
+        </div>
+        <div class="breakdown" id="breakdown"></div>
+        <div class="review">
+          <h3>Gabarito comentado</h3>
+          <div id="reviewList"></div>
+        </div>
+        <button class="btn ghost" id="btnRetry">Refazer quiz</button>
+        <footer class="credit">Vivian Bispo · Teacher Mentora de Comissários de Voo<br>Prática pessoal · estrutura e vocabulário</footer>
+      </section>
+
+    </div>
+
+    <div class="stage-bottom" id="stageBottom" hidden>
+      <div class="qcount mono" id="qCount"></div>
+      <button class="btn" id="btnNext">Continuar →</button>
+    </div>
+
+    <div class="stage-bottom" id="stageBottomReview" hidden>
+      <button class="btn" id="btnSubmit">Enviar o teste</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var QUESTION_TIME = 45; // seconds — set by the selected resolution mode
+
+  // Full question bank (112 items, levels A2-C1, options A-D). Each quiz attempt
+  // draws 12 at random from the whole bank, mixing every level.
+  var ALL_Q = [
+    { level:"B1", tag:"Preposição dependente", stem:"She has always been very good <b>___</b> dealing with difficult passengers.",
+      opts:["at","in","for","with"], correct:0,
+      why:"O adjetivo \"good\" pede a preposição <b>at</b> quando seguido de atividade/habilidade: \"good at doing something\"." },
+    { level:"B1", tag:"Voz passiva", stem:"Choose the passive form of: \"The airline canceled the flight due to bad weather.\"",
+      opts:["The flight was canceled by the airline due to bad weather.","The flight has canceled by the airline due to bad weather.","The flight was canceling by the airline due to bad weather.","The airline was canceled the flight due to bad weather."], correct:0,
+      why:"Voz passiva no passado simples: <b>be (was) + particípio (canceled)</b>, mantendo o mesmo tempo verbal da frase ativa original." },
+    { level:"B2", tag:"Discurso indireto", stem:"The flight attendant said: \"I have already checked the safety equipment.\" In reported speech:",
+      opts:["The flight attendant said that she has already checked the safety equipment.","The flight attendant said that she had already checked the safety equipment.","The flight attendant said that she already checked the safety equipment.","The flight attendant said that she already checks the safety equipment."], correct:1,
+      why:"Regra do backshift: present perfect (\"have checked\") recua para <b>past perfect (\"had checked\")</b> quando relatado com verbo de elocução no passado (\"said\")." },
+    { level:"B1", tag:"Pronome relativo", stem:"The passenger <b>___</b> luggage was lost filed a complaint at the counter.",
+      opts:["who","which","whose","whom"], correct:2,
+      why:"<b>Whose</b> indica posse (\"o passageiro CUJA bagagem\"). \"Who/which/that\" não expressam posse, e \"whom\" é objeto, não possessivo." },
+    { level:"B2", tag:"Conectivo concessivo", stem:"<b>___</b> the turbulence, the crew remained calm and continued the service.",
+      opts:["Because","Despite","Since","So that"], correct:1,
+      why:"Depois do conectivo vem apenas um substantivo (\"the turbulence\"), não uma oração com verbo — por isso <b>Despite</b> (+ substantivo) é o correto, e não \"Although\" (que exigiria sujeito + verbo)." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"This is by far <b>___</b> flight I've ever taken.",
+      opts:["the smoothest","the more smooth","the most smooth","smoother"], correct:0,
+      why:"\"Smooth\" é adjetivo curto (uma sílaba): superlativo com <b>-est</b> → <b>the smoothest</b>, sem \"more/most\"." },
+    { level:"A2", tag:"Verbo modal", stem:"Passengers <b>___</b> fasten their seatbelts during takeoff and landing.",
+      opts:["can","might","must","would"], correct:2,
+      why:"A frase expressa obrigação/regra de segurança, sentido do modal <b>must</b>. Os demais expressam capacidade, possibilidade ou hipótese." },
+    { level:"A2", tag:"Presente perfeito", stem:"I <b>___</b> never <b>___</b> (be) to Japan, but I'm flying there next month.",
+      opts:["have / been","has / been","had / been","was / being"], correct:0,
+      why:"Sujeito \"I\" + experiência de vida sem tempo definido → present perfect: <b>have never been</b>." },
+    { level:"A2", tag:"Phrasal verb", stem:"The plane finally <b>___</b> off after a two-hour delay.",
+      opts:["took","taken","take","was take"], correct:0,
+      why:"\"Take off\" (decolar) no passado simples: <b>took off</b>. As demais formas não existem ou misturam tempos verbais incorretamente." },
+    { level:"B1", tag:"Question tag", stem:"You've worked as a flight attendant for five years, <b>___</b>?",
+      opts:["haven't you","don't you","didn't you","have you"], correct:0,
+      why:"A frase-base usa present perfect afirmativo (\"You've worked\"); a question tag espelha o auxiliar em forma negativa: <b>haven't you</b>." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"mandatory\" in: \"Wearing the uniform correctly is mandatory for all crew members.\"",
+      opts:["optional","recommended","obligatory","flexible"], correct:2,
+      why:"\"Mandatory\" = compulsório, obrigatório. <b>Obligatory</b> é o sinônimo direto; os demais indicam o oposto ou algo não obrigatório." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"Even during the emergency landing, she managed to keep her cool.\" The expression \"keep her cool\" means:",
+      opts:["stay calm","lose her temper","feel cold","act quickly"], correct:0,
+      why:"\"Keep your cool\" é um idiom para <b>manter a calma</b> sob pressão — o oposto de \"lose your temper\" (perder a paciência)." },
+    { level:"B1", tag:"Preposição dependente", stem:"The captain is responsible <b>___</b> the safety of everyone on board.",
+      opts:["of","for","with","about"], correct:1,
+      why:"\"Responsible\" combina com a preposição <b>for</b>: \"responsible for something\"." },
+    { level:"B1", tag:"Preposição dependente", stem:"I'm really looking forward <b>___</b> my next flight to Lisbon.",
+      opts:["to","for","at","on"], correct:0,
+      why:"\"Look forward to\" é seguido de \"to\" + substantivo/gerúndio: <b>looking forward to</b> my flight." },
+    { level:"A2", tag:"Preposição dependente", stem:"She apologized <b>___</b> the delay before the boarding started.",
+      opts:["for","of","about","with"], correct:0,
+      why:"\"Apologize\" combina com <b>for</b> quando seguido do motivo do pedido de desculpas." },
+    { level:"B1", tag:"Preposição dependente", stem:"New crew members are trained to deal <b>___</b> emergency situations calmly.",
+      opts:["with","of","for","in"], correct:0,
+      why:"\"Deal\" combina com <b>with</b>: \"deal with a situation\"." },
+    { level:"B1", tag:"Voz passiva", stem:"Choose the passive form of: \"The company trains all new flight attendants every year.\"",
+      opts:["All new flight attendants are trained by the company every year.","All new flight attendants have trained by the company every year.","All new flight attendants was trained by the company every year.","The company are trained all new flight attendants every year."], correct:0,
+      why:"Presente simples na voz passiva: <b>be (are) + particípio (trained)</b>, mantendo o sujeito plural \"flight attendants\"." },
+    { level:"B2", tag:"Voz passiva", stem:"Choose the passive form of: \"They will announce the gate change soon.\"",
+      opts:["The gate change will be announced soon.","The gate change will announced soon.","The gate change is announced soon.","The gate change will be announce soon."], correct:0,
+      why:"Futuro com \"will\" na voz passiva: <b>will be + particípio</b> → \"will be announced\"." },
+    { level:"B2", tag:"Voz passiva", stem:"Choose the passive form of: \"Someone has already checked the emergency exits.\"",
+      opts:["The emergency exits have already been checked.","The emergency exits has already been checked.","The emergency exits were already checked.","The emergency exits have already checked."], correct:0,
+      why:"Present perfect na voz passiva: <b>have/has been + particípio</b>. Sujeito plural \"exits\" pede \"have\", não \"has\"." },
+    { level:"B2", tag:"Voz passiva", stem:"Choose the passive form of: \"The airline is currently reviewing the new uniform policy.\"",
+      opts:["The new uniform policy is currently being reviewed by the airline.","The new uniform policy is currently reviewed by the airline.","The new uniform policy is currently being review by the airline.","The new uniform policy currently being reviewed by the airline."], correct:0,
+      why:"Presente contínuo na voz passiva: <b>is/are being + particípio</b> → \"is being reviewed\"." },
+    { level:"B2", tag:"Discurso indireto", stem:"The pilot said: \"We will land in twenty minutes.\" In reported speech:",
+      opts:["The pilot said that they would land in twenty minutes.","The pilot said that they will land in twenty minutes.","The pilot said that they land in twenty minutes.","The pilot said that they would landed in twenty minutes."], correct:0,
+      why:"Backshift: \"will\" recua para <b>would</b> quando relatado com verbo de elocução no passado (\"said\")." },
+    { level:"B2", tag:"Discurso indireto", stem:"A passenger asked: \"Where is the nearest restroom?\" In reported speech:",
+      opts:["The passenger asked where the nearest restroom was.","The passenger asked where was the nearest restroom.","The passenger asked where is the nearest restroom.","The passenger asked where the nearest restroom is."], correct:0,
+      why:"Perguntas relatadas mantêm a ordem afirmativa (sujeito + verbo) e recuam o tempo verbal: <b>was</b> no lugar de \"is\", sem inversão." },
+    { level:"B2", tag:"Discurso indireto", stem:"She said: \"I can't find my boarding pass.\" In reported speech:",
+      opts:["She said that she couldn't find her boarding pass.","She said that she can't find her boarding pass.","She said that she can't found her boarding pass.","She said that she couldn't found her boarding pass."], correct:0,
+      why:"Backshift: \"can't\" recua para <b>couldn't</b>; o pronome possessivo também muda para acompanhar o sujeito (\"her\", não \"my\")." },
+    { level:"B2", tag:"Discurso indireto", stem:"The instructor told the trainees: \"Don't forget to check the oxygen masks.\" In reported speech:",
+      opts:["The instructor told the trainees not to forget to check the oxygen masks.","The instructor told the trainees don't forget to check the oxygen masks.","The instructor told the trainees to not forgetting to check the oxygen masks.","The instructor told the trainees didn't forget to check the oxygen masks."], correct:0,
+      why:"Imperativo negativo relatado vira infinitivo negativo: <b>not to + verbo</b> → \"not to forget\"." },
+    { level:"A2", tag:"Pronome relativo", stem:"The airport <b>___</b> we landed was much bigger than expected.",
+      opts:["where","which","who","whose"], correct:0,
+      why:"Depois de um lugar (\"the airport\"), usa-se o pronome relativo de lugar <b>where</b>." },
+    { level:"B2", tag:"Pronome relativo", stem:"The captain, <b>___</b> has flown for over twenty years, trained most of the crew.",
+      opts:["who","which","whose","that"], correct:0,
+      why:"\"Who\" retoma \"the captain\" (pessoa) como sujeito da oração; \"that\" não é usado em orações explicativas separadas por vírgula." },
+    { level:"A2", tag:"Pronome relativo", stem:"This is the moment <b>___</b> the whole crew feels proudest.",
+      opts:["when","which","who","whose"], correct:0,
+      why:"Depois de uma expressão de tempo (\"the moment\"), usa-se o pronome relativo <b>when</b>." },
+    { level:"B1", tag:"Pronome relativo", stem:"Passengers <b>___</b> tickets were upgraded were seated in business class.",
+      opts:["whose","who","which","whom"], correct:0,
+      why:"<b>Whose</b> indica posse: \"passageiros CUJAS passagens foram atualizadas\"." },
+    { level:"B1", tag:"Conectivo", stem:"<b>___</b> she was exhausted after the long flight, she still smiled at every passenger.",
+      opts:["Although","Despite","Because of","So"], correct:0,
+      why:"Antes de uma oração completa (sujeito + verbo: \"she was exhausted\"), usa-se <b>Although</b>, não \"Despite\" (que pede substantivo/gerúndio)." },
+    { level:"A2", tag:"Conectivo", stem:"The flight was delayed <b>___</b> the heavy storm over the airport.",
+      opts:["because","because of","although","so that"], correct:1,
+      why:"Antes de um substantivo (\"the heavy storm\"), usa-se <b>because of</b>; \"because\" pede uma oração com verbo." },
+    { level:"B2", tag:"Conectivo", stem:"She spoke slowly and clearly <b>___</b> everyone could understand the safety instructions.",
+      opts:["so that","because of","despite","in spite of"], correct:0,
+      why:"<b>So that</b> introduz finalidade/propósito (\"para que todos entendessem\")." },
+    { level:"B2", tag:"Conectivo", stem:"The crew kept working <b>___</b> the turbulence got worse.",
+      opts:["even though","despite","because of","so"], correct:0,
+      why:"Antes de uma oração completa (\"the turbulence got worse\"), usa-se <b>even though</b>, equivalente a \"although\"." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"This new aircraft is <b>___</b> than the previous model.",
+      opts:["more modern","modernner","the most modern","modern"], correct:0,
+      why:"\"Modern\" é adjetivo longo: comparativo com <b>more</b> + adjetivo, sem sufixo -er." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"Of all the destinations she has visited, Tokyo was <b>___</b>.",
+      opts:["the most exciting","the excitingest","more exciting","most excitinger"], correct:0,
+      why:"\"Exciting\" é adjetivo longo: superlativo com <b>the most</b> + adjetivo, sem sufixo -est." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"The line at check-in today is <b>___</b> it was yesterday.",
+      opts:["as long as","more long than","longer as","the longest than"], correct:0,
+      why:"Comparação de igualdade: <b>as + adjetivo + as</b> → \"as long as\"." },
+    { level:"A2", tag:"Verbo modal", stem:"You <b>___</b> bring liquids over 100ml in your carry-on — it's against the rules.",
+      opts:["mustn't","don't have to","might not","shouldn't have to"], correct:0,
+      why:"Proibição (regra que não pode ser quebrada) usa <b>mustn't</b>. \"Don't have to\" indica ausência de obrigação, não proibição." },
+    { level:"B2", tag:"Verbo modal", stem:"She <b>___</b> be at the gate by now — her flight boarded twenty minutes ago.",
+      opts:["must","might","can","would"], correct:0,
+      why:"Dedução lógica sobre o presente (\"com certeza está\") usa <b>must</b> + infinitivo sem \"to\"." },
+    { level:"A2", tag:"Verbo modal", stem:"Crew members <b>___</b> speak a second language, but it's a big advantage.",
+      opts:["don't have to","mustn't","can't","shouldn't"], correct:0,
+      why:"Ausência de obrigação (não é exigido, mas é bem-vindo) é expressa por <b>don't have to</b>." },
+    { level:"B1", tag:"Verbo modal", stem:"If I were you, I <b>___</b> arrive at the airport at least two hours early.",
+      opts:["would","will","must","can"], correct:0,
+      why:"Conselho hipotético com \"If I were you\" pede <b>would</b> na oração principal, típico do segundo condicional." },
+    { level:"A2", tag:"Presente perfeito", stem:"I <b>___</b> (work) as a flight attendant since 2019.",
+      opts:["have worked","worked","was working","work"], correct:0,
+      why:"\"Since 2019\" marca uma ação iniciada no passado e que continua — usa-se o <b>present perfect</b>: \"have worked\"." },
+    { level:"B1", tag:"Passado simples e contínuo", stem:"The plane <b>___</b> (take off) while I <b>___</b> (read) the safety card.",
+      opts:["took off / was reading","was taking off / read","took off / read","was taking off / was reading"], correct:0,
+      why:"Ação pontual que interrompe outra em andamento: passado simples (<b>took off</b>) + passado contínuo (<b>was reading</b>)." },
+    { level:"A2", tag:"Futuro (will x going to)", stem:"Look at those dark clouds! I think the flight <b>___</b> be delayed.",
+      opts:["is going to","will","would","is"], correct:0,
+      why:"Previsão baseada em evidência visível no presente usa <b>going to</b>, não \"will\" (mais comum para decisões espontâneas)." },
+    { level:"B2", tag:"Passado perfeito", stem:"By the time we reached the gate, the flight <b>___</b> (already / leave).",
+      opts:["had already left","already left","has already left","was already leaving"], correct:0,
+      why:"Ação concluída antes de outro momento no passado (\"by the time we reached\") usa <b>past perfect</b>: \"had already left\"." },
+    { level:"A2", tag:"Presente contínuo (futuro)", stem:"I <b>___</b> (fly) to Rome next Friday — it's already on the schedule.",
+      opts:["am flying","fly","will fly","flew"], correct:0,
+      why:"Plano já confirmado e agendado para o futuro próximo usa <b>presente contínuo</b>: \"am flying\"." },
+    { level:"A2", tag:"Phrasal verb", stem:"Please <b>___</b> your seatbelt before the plane starts moving.",
+      opts:["put on","take off","turn on","look up"], correct:0,
+      why:"\"Put on\" significa colocar/vestir algo — nesse caso, o cinto de segurança." },
+    { level:"B1", tag:"Phrasal verb", stem:"The flight was <b>___</b> due to a technical problem.",
+      opts:["called off","called up","called out","called in"], correct:0,
+      why:"\"Call off\" significa cancelar. As demais combinações têm sentidos diferentes (convocar, gritar, etc.)." },
+    { level:"A2", tag:"Phrasal verb", stem:"Could you <b>___</b> the volume? I can barely hear the announcement.",
+      opts:["turn up","turn off","turn down","turn out"], correct:0,
+      why:"\"Turn up\" significa aumentar (som, volume). \"Turn down\" seria diminuir — o oposto do pedido." },
+    { level:"B2", tag:"Phrasal verb", stem:"New flight attendants have to <b>___</b> a lot of information during training.",
+      opts:["take in","take off","take out","take up"], correct:0,
+      why:"\"Take in\" significa absorver/assimilar informação." },
+    { level:"A2", tag:"Question tag", stem:"This isn't your first flight as crew, <b>___</b>?",
+      opts:["is it","isn't it","was it","are you"], correct:0,
+      why:"Frase-base negativa (\"isn't\") pede question tag afirmativa: <b>is it</b>." },
+    { level:"B2", tag:"Question tag", stem:"The passengers must fasten their seatbelts now, <b>___</b>?",
+      opts:["mustn't they","must they","don't they","aren't they"], correct:0,
+      why:"Modal afirmativo \"must\" pede question tag negativa com o mesmo modal: <b>mustn't they</b>." },
+    { level:"B1", tag:"Question tag", stem:"You haven't flown this route before, <b>___</b>?",
+      opts:["have you","haven't you","did you","don't you"], correct:0,
+      why:"Frase-base negativa (\"haven't flown\") pede question tag afirmativa com o mesmo auxiliar: <b>have you</b>." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"reassure\" in: \"The flight attendant tried to reassure the nervous passenger.\"",
+      opts:["comfort","frighten","ignore","confuse"], correct:0,
+      why:"\"Reassure\" significa tranquilizar, dar confiança — sinônimo mais próximo é <b>comfort</b>." },
+    { level:"A2", tag:"Vocabulário · antônimo", stem:"Choose the word that means the opposite of \"departure\" in: \"Please check the departure time on your ticket.\"",
+      opts:["arrival","boarding","delay","gate"], correct:0,
+      why:"\"Departure\" (partida) é o oposto de <b>arrival</b> (chegada)." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"turbulence\" in: \"We experienced some turbulence during the flight.\"",
+      opts:["shaking","silence","delay","comfort"], correct:0,
+      why:"\"Turbulence\" é a instabilidade do voo — sinônimo mais próximo aqui é <b>shaking</b>." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"prompt\" in: \"Crew members must give a prompt response in emergencies.\"",
+      opts:["quick","slow","careful","quiet"], correct:0,
+      why:"\"Prompt\" significa rápido, imediato — sinônimo mais próximo é <b>quick</b>." },
+    { level:"C1", tag:"Expressão idiomática", stem:"\"After the rough landing, everyone was relieved it went off without a hitch.\" The expression \"without a hitch\" means:",
+      opts:["without any problems","without any passengers","without warning","without delay"], correct:0,
+      why:"\"Without a hitch\" é um idiom para algo que aconteceu <b>sem nenhum problema</b>, tranquilamente." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"The new schedule caught the whole crew off guard.\" The expression \"caught off guard\" means:",
+      opts:["surprised, unprepared","informed in advance","pleased","annoyed"], correct:0,
+      why:"\"Caught off guard\" significa <b>pego de surpresa</b>, sem estar preparado para algo." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"Once the doors are closed, there's no turning back.\" The expression \"no turning back\" means:",
+      opts:["no way to change the decision now","no need to hurry","no more delays expected","no other option available later"], correct:0,
+      why:"\"No turning back\" significa que <b>não há como voltar atrás</b> na decisão ou ação." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"She always goes the extra mile to make passengers feel comfortable.\" The expression \"goes the extra mile\" means:",
+      opts:["makes extra effort","travels long distances","works overtime","arrives early"], correct:0,
+      why:"\"Go the extra mile\" significa <b>fazer um esforço extra</b>, além do esperado." },
+    { level:"B1", tag:"Condicional (tipo 1)", stem:"If the weather <b>___</b> bad tomorrow, the flight will probably be delayed.",
+      opts:["is","was","were","will be"], correct:0,
+      why:"Primeiro condicional (situação real/possível no futuro): <b>if + presente simples</b>, \"will\" na oração principal." },
+    { level:"B2", tag:"Condicional (tipo 2)", stem:"If I <b>___</b> more free time, I would travel to a new country every month.",
+      opts:["had","have","would have","has"], correct:0,
+      why:"Segundo condicional (situação hipotética, pouco provável): <b>if + passado simples</b> (\"had\"), \"would\" na oração principal." },
+    { level:"C1", tag:"Condicional (tipo 3)", stem:"If she <b>___</b> the announcement more clearly, the passengers wouldn't have missed the gate change.",
+      opts:["had made","made","has made","would make"], correct:0,
+      why:"Terceiro condicional (situação hipotética no passado, já sem solução): <b>if + past perfect</b> (\"had made\"), \"would have + particípio\" na oração principal." },
+    { level:"A2", tag:"Verbo \"to be\"", stem:"My sister <b>___</b> a nurse. She works at the city hospital.",
+      opts:["is","are","am","be"], correct:0,
+      why:"Sujeito na 3ª pessoa do singular (\"My sister\") usa <b>is</b> do verbo \"to be\"." },
+    { level:"A2", tag:"Presente simples", stem:"He usually <b>___</b> breakfast before going to work.",
+      opts:["has","have","having","is having"], correct:0,
+      why:"3ª pessoa do singular no presente simples: verbo + <b>-s</b> (\"has\", de \"have\")." },
+    { level:"A2", tag:"There is / there are", stem:"<b>___</b> a lot of traffic on this street every morning.",
+      opts:["There is","There are","It is","There has"], correct:0,
+      why:"\"Traffic\" é substantivo incontável (singular): usa-se <b>there is</b>, não \"there are\"." },
+    { level:"A2", tag:"Some / any", stem:"I don't have <b>___</b> money with me right now.",
+      opts:["any","some","much of","a"], correct:0,
+      why:"Em frases negativas, usa-se <b>any</b> — \"some\" é mais comum em frases afirmativas." },
+    { level:"A2", tag:"Preposições de tempo", stem:"The meeting starts <b>___</b> 9 o'clock <b>___</b> Monday morning.",
+      opts:["at / on","in / at","on / in","at / in"], correct:0,
+      why:"Horários usam <b>at</b> (\"at 9 o'clock\") e dias usam <b>on</b> (\"on Monday\")." },
+    { level:"A2", tag:"Preposições de lugar", stem:"The keys are <b>___</b> the drawer, next to the notebook.",
+      opts:["in","on","at","under"], correct:0,
+      why:"Para algo dentro de um espaço fechado (como uma gaveta), usa-se <b>in</b>." },
+    { level:"A2", tag:"Plural irregular", stem:"There were three <b>___</b> playing in the park with their dog.",
+      opts:["children","childs","childrens","child"], correct:0,
+      why:"O plural de \"child\" é irregular: <b>children</b>." },
+    { level:"A2", tag:"Artigos", stem:"She works as <b>___</b> engineer for a small company downtown.",
+      opts:["an","a","the","some"], correct:0,
+      why:"Antes de palavra iniciada por som de vogal (\"engineer\"), usa-se o artigo <b>an</b>." },
+    { level:"A2", tag:"Verbo modal (habilidade)", stem:"My little brother <b>___</b> swim, but he can't ride a bike yet.",
+      opts:["can","must","should","will"], correct:0,
+      why:"Habilidade/capacidade no presente é expressa pelo modal <b>can</b>." },
+    { level:"A2", tag:"Passado simples (irregular)", stem:"We <b>___</b> to the beach last weekend and had a great time.",
+      opts:["went","goed","gone","go"], correct:0,
+      why:"\"Go\" é verbo irregular: passado simples é <b>went</b>, não \"goed\"." },
+    { level:"A2", tag:"Pronomes possessivos", stem:"Is this pen yours or is it <b>___</b>?",
+      opts:["hers","her","she","hers's"], correct:0,
+      why:"Pronome possessivo (substitui \"her pen\") é <b>hers</b>, sem substantivo depois." },
+    { level:"A2", tag:"Conectivos básicos", stem:"I wanted to go for a walk, <b>___</b> it started raining.",
+      opts:["but","and","because","so"], correct:0,
+      why:"<b>But</b> introduz uma ideia de contraste/oposição em relação à primeira parte da frase." },
+    { level:"A2", tag:"Advérbios de frequência", stem:"She <b>___</b> arrives late for class.",
+      opts:["never","not never","don't never","not"], correct:0,
+      why:"Advérbios de frequência como <b>never</b> vêm entre o sujeito e o verbo principal, sem \"not\"." },
+    { level:"A2", tag:"Comparativo simples", stem:"This backpack is <b>___</b> than the one I had before.",
+      opts:["lighter","more light","most light","light"], correct:0,
+      why:"\"Light\" é adjetivo curto: comparativo com <b>-er</b> → \"lighter\"." },
+    { level:"A2", tag:"Quantificadores", stem:"How <b>___</b> water do you drink every day?",
+      opts:["much","many","a lot","any"], correct:0,
+      why:"\"Water\" é substantivo incontável: usa-se <b>how much</b>, não \"how many\"." },
+    { level:"A2", tag:"Futuro (going to)", stem:"Look at those clouds! It <b>___</b> to rain soon.",
+      opts:["is going","will going","is go","going"], correct:0,
+      why:"\"Going to\" + infinitivo indica previsão baseada em algo visível agora: <b>is going to</b>." },
+    { level:"A2", tag:"Phrasal verb básico", stem:"Could you <b>___</b> the lights before you leave the room?",
+      opts:["turn off","turn in","turn down","turn over"], correct:0,
+      why:"\"Turn off\" significa desligar (uma luz, um aparelho)." },
+    { level:"A2", tag:"Phrasal verb básico", stem:"I usually <b>___</b> at 6 a.m. and go for a run.",
+      opts:["wake up","wake in","wake out","wake for"], correct:0,
+      why:"\"Wake up\" significa acordar." },
+    { level:"A2", tag:"Vocabulário · antônimo", stem:"Choose the word that means the opposite of \"expensive\" in: \"This restaurant is too expensive for us.\"",
+      opts:["cheap","large","modern","popular"], correct:0,
+      why:"\"Expensive\" (caro) é o oposto de <b>cheap</b> (barato)." },
+    { level:"A2", tag:"Vocabulário · cotidiano", stem:"Choose the best word to complete: \"Can you help me ___ the table before dinner?\"",
+      opts:["set","make","do","put"], correct:0,
+      why:"A collocation correta é <b>set the table</b> (pôr a mesa)." },
+    { level:"B1", tag:"Presente perfeito x passado", stem:"I <b>___</b> that movie twice already, but I'd watch it again.",
+      opts:["have watched","watched","was watching","watch"], correct:0,
+      why:"Experiência sem tempo específico mencionado usa <b>present perfect</b>: \"have watched\"." },
+    { level:"B1", tag:"Voz passiva", stem:"Choose the passive form of: \"Someone left this umbrella on the bus yesterday.\"",
+      opts:["This umbrella was left on the bus yesterday.","This umbrella has left on the bus yesterday.","This umbrella left on the bus yesterday.","This umbrella was leaving on the bus yesterday."], correct:0,
+      why:"Voz passiva no passado simples: <b>was + particípio</b> (\"was left\")." },
+    { level:"B1", tag:"Conectivo", stem:"<b>___</b> it was raining heavily, they decided to go for a walk anyway.",
+      opts:["Although","Because","So","Due to"], correct:0,
+      why:"Antes de uma oração completa (\"it was raining heavily\"), usa-se <b>Although</b>." },
+    { level:"B1", tag:"Phrasal verb", stem:"I need to <b>___</b> this form before the end of the day.",
+      opts:["fill out","fill up","fill in with","fill on"], correct:0,
+      why:"\"Fill out\" (ou \"fill in\") significa preencher um formulário; \"fill out\" é a forma mais comum em inglês americano." },
+    { level:"B1", tag:"Comparativo / superlativo", stem:"This is <b>___</b> book I've read all year.",
+      opts:["the most interesting","the interestingest","more interesting","most interestinger"], correct:0,
+      why:"\"Interesting\" é adjetivo longo: superlativo com <b>the most</b>." },
+    { level:"B2", tag:"Verbo modal", stem:"You <b>___</b> have told me you were coming — I would have cooked more food!",
+      opts:["should","must","can","need"], correct:0,
+      why:"Crítica/arrependimento sobre o passado: <b>should have</b> + particípio." },
+    { level:"B2", tag:"Discurso indireto", stem:"He said: \"I'll call you as soon as I arrive.\" In reported speech:",
+      opts:["He said he would call me as soon as he arrived.","He said he will call me as soon as he arrives.","He said he calls me as soon as he arrives.","He said he would call me as soon as he arrive."], correct:0,
+      why:"Backshift: \"will\" → <b>would</b>, e \"arrive\" (presente) → <b>arrived</b> (passado), mantendo a lógica temporal da frase relatada." },
+    { level:"B1", tag:"Pronome relativo", stem:"The book <b>___</b> I borrowed from the library is due next week.",
+      opts:["that","who","whose","where"], correct:0,
+      why:"Para coisas (\"the book\"), usa-se <b>that</b> (ou \"which\")." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"diligent\" in: \"He is a diligent student who never misses an assignment.\"",
+      opts:["hardworking","lazy","forgetful","careless"], correct:0,
+      why:"\"Diligent\" significa dedicado, esforçado — sinônimo mais próximo é <b>hardworking</b>." },
+    { level:"B2", tag:"Condicional (tipo 2)", stem:"If I <b>___</b> you, I wouldn't spend all my savings on a new phone.",
+      opts:["were","was","am","would be"], correct:0,
+      why:"No segundo condicional, o verbo \"to be\" costuma usar <b>were</b> para todas as pessoas em registro mais cuidado (\"If I were you\")." },
+    { level:"C1", tag:"Inversão enfática", stem:"<b>___</b> had she sat down than the phone rang again.",
+      opts:["No sooner","Hardly ever","Not until","Only if"], correct:0,
+      why:"\"No sooner... than\" é uma estrutura de inversão enfática usada para indicar que uma ação aconteceu logo após outra." },
+    { level:"C1", tag:"Inversão condicional", stem:"<b>___</b> I known about the traffic, I would have left home earlier.",
+      opts:["Had","If","Should","Were"], correct:0,
+      why:"Inversão no terceiro condicional: <b>Had</b> + sujeito + particípio substitui \"If I had known\"." },
+    { level:"C1", tag:"Condicional misto", stem:"If she <b>___</b> harder at university, she would have a much better job now.",
+      opts:["had studied","studied","has studied","would study"], correct:0,
+      why:"Condicional misto (causa no passado, consequência no presente): <b>if + past perfect</b> (\"had studied\") + \"would\" no presente na oração principal." },
+    { level:"C1", tag:"Voz passiva (verbos de opinião)", stem:"Choose the correct passive form of: \"People believe that the company will expand next year.\"",
+      opts:["The company is believed to expand next year.","The company is believed that will expand next year.","The company believed to expand next year.","The company is believing to expand next year."], correct:0,
+      why:"Estrutura formal com verbos de opinião (\"believe\"): <b>be believed + infinitivo</b> — \"is believed to expand\"." },
+    { level:"C1", tag:"Oração reduzida (particípio)", stem:"<b>___</b> tired after the long journey, she decided to go straight to bed.",
+      opts:["Feeling","Felt","To feel","Feel"], correct:0,
+      why:"Oração reduzida de particípio presente indicando causa/motivo: <b>Feeling</b> tired = \"Because she felt tired\"." },
+    { level:"C1", tag:"Frase clivada", stem:"Choose the cleft sentence equivalent to: \"She finally told me the truth after all these years.\"",
+      opts:["It was the truth that she finally told me after all these years.","It was the truth what she finally told me after all these years.","That was the truth she finally told me after all these years.","It is the truth that she finally told me after all these years."], correct:0,
+      why:"Frase clivada com <b>It was... that...</b> dá ênfase ao elemento destacado (\"the truth\"), mantendo o mesmo tempo verbal da frase original." },
+    { level:"C1", tag:"Conectivo formal", stem:"The proposal was rejected by the board; <b>___</b>, the team decided to revise it and try again.",
+      opts:["nevertheless","despite","because of","provided that"], correct:0,
+      why:"<b>Nevertheless</b> (\"mesmo assim\") conecta duas orações independentes, indicando contraste — usado como advérbio entre frases, não como preposição." },
+    { level:"C1", tag:"Conectivo formal (condição)", stem:"You can borrow the car <b>___</b> you bring it back before six.",
+      opts:["provided that","despite","in spite of","although"], correct:0,
+      why:"<b>Provided that</b> introduz uma condição necessária (\"desde que\"), equivalente a \"if\" em registro mais formal." },
+    { level:"C1", tag:"Subjuntivo", stem:"The manager insisted that the report <b>___</b> submitted by Friday.",
+      opts:["be","is","was","will be"], correct:0,
+      why:"Depois de verbos como \"insist\", \"suggest\" e \"recommend\", usa-se o <b>subjuntivo</b>: forma base do verbo (\"be\"), sem flexão." },
+    { level:"C1", tag:"Elipse", stem:"She can speak French fluently, and so <b>___</b> her brother.",
+      opts:["can","does","is","has"], correct:0,
+      why:"Para evitar repetição, usa-se o mesmo auxiliar da primeira oração: como o verbo era \"can\", repete-se <b>can</b> (\"so can her brother\")." },
+    { level:"C1", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"meticulous\" in: \"She is known for being meticulous about every detail of her work.\"",
+      opts:["extremely careful","quite careless","very fast","somewhat lazy"], correct:0,
+      why:"\"Meticulous\" significa extremamente cuidadoso e atento a detalhes." },
+    { level:"C1", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"ambiguous\" in: \"His answer was so ambiguous that nobody understood his real opinion.\"",
+      opts:["unclear","obvious","honest","confident"], correct:0,
+      why:"\"Ambiguous\" significa que pode ser interpretado de mais de uma forma — <b>unclear</b> é o sinônimo mais próximo aqui." },
+    { level:"C1", tag:"Collocation avançada", stem:"The two companies finally managed to <b>___</b> a compromise after weeks of negotiation.",
+      opts:["reach","make","do","take"], correct:0,
+      why:"A collocation correta é <b>reach a compromise</b> (chegar a um acordo)." },
+    { level:"C1", tag:"Phrasal verb avançado", stem:"The negotiations <b>___</b> after both sides refused to change their positions.",
+      opts:["broke down","broke up","broke in","broke off"], correct:0,
+      why:"\"Break down\" (no contexto de negociações) significa fracassar, chegar a um impasse." },
+    { level:"C1", tag:"Expressão idiomática avançada", stem:"\"His explanation didn't hold water once we checked the actual numbers.\" The expression \"didn't hold water\" means:",
+      opts:["wasn't logical or convincing","was completely accurate","was extremely long","was kept secret"], correct:0,
+      why:"\"Not hold water\" é um idiom para um argumento que <b>não se sustenta</b>, não é convincente diante dos fatos." },
+    { level:"C1", tag:"Voz passiva (relatos)", stem:"Choose the correct passive form of: \"They say that the new policy has caused confusion.\"",
+      opts:["The new policy is said to have caused confusion.","The new policy is said that has caused confusion.","The new policy said to have caused confusion.","The new policy is saying to have caused confusion."], correct:0,
+      why:"Estrutura formal de relato: <b>be said to have + particípio</b> para se referir a algo que aconteceu antes." },
+    { level:"C1", tag:"Conectivo de contraste", stem:"<b>___</b> her lack of experience, she was offered the position immediately.",
+      opts:["Despite","Although","Even though","While"], correct:0,
+      why:"Antes de um substantivo (\"her lack of experience\"), usa-se <b>Despite</b>, não \"although/even though/while\" (que pedem oração completa)." },
+    { level:"C1", tag:"Verbo modal (dedução no passado)", stem:"The lights were off and the door was locked — they <b>___</b> already left.",
+      opts:["must have","must","should have","might"], correct:0,
+      why:"Dedução lógica sobre o passado: <b>must have</b> + particípio (\"must have left\")." },
+    { level:"C1", tag:"Gerúndio x infinitivo", stem:"She regrets <b>___</b> him the truth back then — it changed everything.",
+      opts:["not telling","to not tell","not to tell","don't tell"], correct:0,
+      why:"\"Regret\" + gerúndio no negativo usa <b>not + gerúndio</b>: \"regrets not telling\"." },
+    { level:"C1", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"reluctant\" in: \"He was reluctant to accept the new terms of the contract.\"",
+      opts:["unwilling","eager","confident","curious"], correct:0,
+      why:"\"Reluctant\" significa relutante, pouco disposto — sinônimo mais próximo é <b>unwilling</b>." },
+  ];
+
+  var Q = []; // the 12 questions drawn for this attempt
+  var state = { i:0, answers:[] };
+  var raf = null, startTs = 0, elapsedFrozen = 0, paused = false, ended = false;
+
+  var el = {};
+  ["stage","stageTop","bars","qTimerVal","btnPause",
+   "screen-intro","btnStart","bestLine","statTime","modeOptions",
+   "screen-quiz","qLevel","qTag","qStem","qOptions",
+   "screen-review","rCards","rAnsweredCount",
+   "stageBottom","qCount","btnNext",
+   "stageBottomReview","btnSubmit",
+   "screen-results","ringFg","scoreN","scoreTitle","scoreMsg","breakdown","reviewList","btnRetry"
+  ].forEach(function(id){ el[id]=document.getElementById(id); });
+
+  function safeGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function safeSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+    }
+    return a;
+  }
+
+  function lvlBadgeHtml(level){
+    return '<span class="lvl-badge lvl-'+level+'">'+level+'</span>';
+  }
+
+  function setQuestionTime(seconds){
+    QUESTION_TIME = seconds;
+    el.statTime.textContent = "0:" + (seconds<10?"0":"") + seconds;
+  }
+
+  Array.prototype.forEach.call(el.modeOptions.children, function(btn){
+    btn.addEventListener("click", function(){
+      Array.prototype.forEach.call(el.modeOptions.children, function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      setQuestionTime(parseInt(btn.getAttribute("data-time"), 10));
+    });
+  });
+
+  function showScreen(id){
+    ["screen-intro","screen-quiz","screen-review","screen-results"].forEach(function(s){
+      el[s].hidden = (s!==id);
+    });
+    el.stageBottom.hidden = (id!=="screen-quiz");
+    el.stageBottomReview.hidden = (id!=="screen-review");
+    el.stageTop.hidden = (id!=="screen-quiz");
+  }
+
+  function buildBars(){
+    el.bars.innerHTML = "";
+    for(var i=0;i<Q.length;i++){
+      var bar = document.createElement("div");
+      bar.className = "bar" + (i<state.i ? " done" : "");
+      var fill = document.createElement("div");
+      fill.className = "fill";
+      bar.appendChild(fill);
+      el.bars.appendChild(bar);
+    }
+  }
+
+  function currentFill(){ return el.bars.children[state.i].querySelector(".fill"); }
+
+  function tick(now){
+    if(paused || ended) return;
+    var elapsed = elapsedFrozen + (now - startTs);
+    var pct = Math.min(1, elapsed / (QUESTION_TIME*1000));
+    currentFill().style.width = (pct*100) + "%";
+    var remaining = Math.max(0, Math.ceil(QUESTION_TIME - elapsed/1000));
+    el.qTimerVal.textContent = "0:" + (remaining<10?"0":"") + remaining;
+    el.qTimerVal.classList.toggle("urgent", remaining<=10);
+    if(pct>=1){ advance(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function startQuestionTimer(){
+    cancelAnimationFrame(raf);
+    elapsedFrozen = 0; paused = false;
+    startTs = performance.now();
+    el.btnPause.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+    raf = requestAnimationFrame(tick);
+  }
+
+  el.btnPause.addEventListener("click", function(){
+    if(ended) return;
+    paused = !paused;
+    if(paused){
+      cancelAnimationFrame(raf);
+      elapsedFrozen += performance.now() - startTs;
+      el.btnPause.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+    } else {
+      startTs = performance.now();
+      el.btnPause.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+      raf = requestAnimationFrame(tick);
+    }
+  });
+
+  function buildOptions(container, q, idx, onPick){
+    container.innerHTML = "";
+    q.opts.forEach(function(optText, oidx){
+      var letter = String.fromCharCode(65+oidx);
+      var label = document.createElement("label");
+      label.className = "opt" + (state.answers[idx]===oidx ? " selected" : "");
+      label.innerHTML = '<input type="radio"><span class="letter">'+letter+'</span><span class="label"></span>';
+      label.querySelector(".label").textContent = optText;
+      if(state.answers[idx]===oidx) label.querySelector("input").checked = true;
+      label.addEventListener("click", function(){
+        state.answers[idx] = oidx;
+        Array.prototype.forEach.call(container.children, function(o){ o.classList.remove("selected"); });
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+        onPick();
+      });
+      container.appendChild(label);
+    });
+  }
+
+  function renderQuestion(){
+    var q = Q[state.i];
+    el.qLevel.outerHTML = lvlBadgeHtml(q.level).replace('<span class="lvl-badge','<span id="qLevel" class="lvl-badge');
+    el.qLevel = document.getElementById("qLevel");
+    el.qTag.textContent = q.tag;
+    el.qStem.innerHTML = q.stem;
+    el.qCount.textContent = "QUESTÃO " + (state.i+1) + " / " + Q.length;
+    el.btnNext.disabled = state.answers[state.i]===null;
+    el.btnNext.textContent = state.i===Q.length-1 ? "Ir para revisão →" : "Continuar →";
+    buildOptions(el.qOptions, q, state.i, function(){ el.btnNext.disabled = false; });
+    buildBars();
+    startQuestionTimer();
+    showScreen("screen-quiz");
+  }
+
+  function advance(){
+    cancelAnimationFrame(raf);
+    if(state.i < Q.length-1){
+      state.i++;
+      renderQuestion();
+    } else {
+      showReview();
+    }
+  }
+
+  el.btnNext.addEventListener("click", advance);
+
+  el.btnStart.addEventListener("click", function(){
+    Q = shuffle(ALL_Q).slice(0,12);
+    state = { i:0, answers:new Array(Q.length).fill(null) };
+    ended = false;
+    renderQuestion();
+  });
+
+  function updateAnsweredCount(){
+    var answeredCount = state.answers.filter(function(a){ return a!==null; }).length;
+    el.rAnsweredCount.textContent = answeredCount + "/" + Q.length;
+  }
+
+  function showReview(){
+    cancelAnimationFrame(raf);
+    updateAnsweredCount();
+    el.rCards.innerHTML = "";
+    Q.forEach(function(q, idx){
+      var card = document.createElement("div");
+      card.className = "review-card";
+      card.innerHTML =
+        '<div class="rc-head"><span class="rc-num mono">QUESTÃO '+(idx+1)+'</span>'+lvlBadgeHtml(q.level)+'<span class="qtag">'+q.tag+'</span><span class="rc-status" id="rcStatus'+idx+'"></span></div>'+
+        '<p class="qstem"></p>'+
+        '<div class="options" id="rcOpts'+idx+'"></div>';
+      card.querySelector(".qstem").innerHTML = q.stem;
+      el.rCards.appendChild(card);
+      var statusEl = card.querySelector("#rcStatus"+idx);
+      var optsEl = card.querySelector("#rcOpts"+idx);
+      function refreshStatus(){
+        var answered = state.answers[idx]!==null;
+        statusEl.className = "rc-status " + (answered ? "ok" : "pending");
+        statusEl.textContent = answered ? "Respondida" : "Pendente";
+      }
+      buildOptions(optsEl, q, idx, function(){ refreshStatus(); updateAnsweredCount(); });
+      refreshStatus();
+    });
+    showScreen("screen-review");
+  }
+
+  el.btnSubmit.addEventListener("click", showResults);
+
+  function showResults(){
+    ended = true;
+    cancelAnimationFrame(raf);
+    showScreen("screen-results");
+
+    var correctCount = 0;
+    Q.forEach(function(q,idx){ if(state.answers[idx]===q.correct) correctCount++; });
+    el.scoreN.textContent = correctCount + "/" + Q.length;
+    var pct = correctCount/Q.length;
+    el.ringFg.setAttribute("stroke-dashoffset", 314*(1-pct));
+
+    var title, msg;
+    if(pct>=0.83){ title="Excelente ritmo"; msg="Estrutura e vocabulário sob pressão de tempo, e você foi bem. Repita o quiz de vez em quando — o banco tem mais perguntas para sortear."; }
+    else if(pct>=0.5){ title="No caminho certo"; msg="Boa parte das regras já está sólida. Releia o gabarito abaixo com atenção aos itens errados."; }
+    else{ title="Vale mais treino"; msg=QUESTION_TIME+" segundos é pouco tempo — isso é normal no começo. Revise cada item abaixo com calma antes da próxima rodada."; }
+    el.scoreTitle.textContent = title;
+    el.scoreMsg.textContent = msg;
+
+    var byTag = {};
+    Q.forEach(function(q,idx){
+      byTag[q.tag] = byTag[q.tag] || {ok:0,total:0};
+      byTag[q.tag].total++;
+      if(state.answers[idx]===q.correct) byTag[q.tag].ok++;
+    });
+    el.breakdown.innerHTML = "";
+    Object.keys(byTag).forEach(function(tag){
+      var d = byTag[tag], p = d.ok/d.total;
+      var row = document.createElement("div");
+      row.className = "bd-row";
+      row.innerHTML = '<span class="lbl">'+tag+'</span><span class="bd-track"><span class="bd-fill'+(p<0.5?' bad':'')+'" style="width:'+(p*100)+'%"></span></span><span class="bd-val mono">'+d.ok+'/'+d.total+'</span>';
+      el.breakdown.appendChild(row);
+    });
+
+    var best = safeGet("quiz_bordo_best");
+    if(best===null || correctCount > parseInt(best,10)){ safeSet("quiz_bordo_best", String(correctCount)); best = String(correctCount); }
+    el.bestLine.hidden = false;
+    el.bestLine.textContent = "Melhor resultado neste dispositivo: " + best + "/" + Q.length;
+
+    el.reviewList.innerHTML = "";
+    Q.forEach(function(q, idx){
+      var ok = state.answers[idx]===q.correct;
+      var card = document.createElement("div");
+      card.className = "rcard";
+      var optsHtml = q.opts.map(function(o,i){
+        var letter = String.fromCharCode(65+i);
+        var cls = i===q.correct ? "correct" : (i===state.answers[idx] ? "wrong" : "");
+        return '<div class="roption '+cls+'"><span class="letter">'+letter+'</span><span>'+o+'</span></div>';
+      }).join("");
+      card.innerHTML =
+        '<div class="rmeta">'+lvlBadgeHtml(q.level)+'<span class="rtag">Q'+(idx+1)+' · '+q.tag+'</span><span class="rstatus '+(ok?'ok':'no')+'">'+(ok?'Acertou':(state.answers[idx]===null?'Sem resposta':'Errou'))+'</span></div>'+
+        '<p class="rstem">'+q.stem+'</p>'+
+        optsHtml+
+        '<div class="rwhy"><b>Por quê:</b> '+q.why+'</div>';
+      el.reviewList.appendChild(card);
+    });
+  }
+
+  el.btnRetry.addEventListener("click", function(){
+    ended = false;
+    showScreen("screen-intro");
+  });
+
+  (function initBest(){
+    var best = safeGet("quiz_bordo_best");
+    if(best!==null){ el.bestLine.hidden = false; el.bestLine.textContent = "Melhor resultado neste dispositivo: " + best + "/12"; }
+  })();
+
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function(){});
+    });
+  }
+</script>
+</body>
+</html>
