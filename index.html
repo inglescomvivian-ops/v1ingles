@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mentoria V1 - Tempos Verbais</title>
-<meta name="description" content="Prática cronometrada de tempos verbais, preposições e vocabulário em inglês, com 3 níveis de dificuldade — Vivian Bispo, Teacher Mentora de Comissários de Voo.">
+<title>Mentoria V1 - Vivian Bispo</title>
+<meta name="description" content="Prática cronometrada de estrutura e vocabulário em inglês, com Vivian Bispo — Teacher Mentora de Comissários de Voo.">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#05070C">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Tempos Verbais">
+<meta name="apple-mobile-web-app-title" content="Mentoria V1">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="favicon.png" type="image/png">
 <style>
@@ -110,12 +110,12 @@
     font-family:'IBM Plex Mono'; font-size:10px; font-weight:700; letter-spacing:.02em;
     padding:4px 7px; border-radius:7px; border:1px solid transparent;
   }
-  .lvl-A1{ color:var(--good); background:var(--good-bg); border-color:rgba(56,199,147,.35); }
   .lvl-A2{ color:var(--good); background:var(--good-bg); border-color:rgba(56,199,147,.35); }
   .lvl-B1{ color:var(--accent-ink); background:rgba(76,141,255,.16); border-color:rgba(76,141,255,.35); }
   .lvl-B2{ color:var(--accent-2); background:rgba(242,183,5,.14); border-color:rgba(242,183,5,.35); }
   .lvl-C1{ color:var(--bad); background:var(--bad-bg); border-color:rgba(255,107,107,.35); }
 
+  /* ---------- intro ---------- */
   /* ---------- access gate (demo) ---------- */
   #screen-gate{ min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:24px 6px; }
   .gate-icon{
@@ -134,8 +134,9 @@
   .gate-error{ margin:0; color:var(--bad); font-size:12.5px; }
   .gate-showpass{ display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-faint); }
   .gate-showpass input{ accent-color:var(--accent); width:14px; height:14px; }
+  .gate-field{ text-align:left; font-family:'IBM Plex Sans', system-ui, sans-serif; }
+  .intro-note{ font-size:12.5px; color:var(--text-dim); background:var(--card-2); border:1px solid var(--line); border-radius:12px; padding:11px 13px; line-height:1.5; }
 
-  /* ---------- intro ---------- */
   #screen-intro{ min-height:100%; display:flex; flex-direction:column; justify-content:center; gap:15px; padding-top:14px; padding-bottom:14px; }
   .mentor-header{ display:flex; align-items:center; gap:10px; }
   .mentor-avatar{
@@ -175,8 +176,8 @@
     display:flex; flex-direction:column; gap:2px;
     transition:border-color .12s ease, color .12s ease, background .12s ease;
   }
-  .mode-btn .mode-name{ font-family:'Sora'; font-weight:700; font-size:13px; }
-  .mode-btn .mode-time{ font-size:10px; }
+  .mode-btn .mode-name{ font-family:'Sora'; font-weight:700; font-size:13.5px; }
+  .mode-btn .mode-time{ font-size:10.5px; }
   .mode-btn.active{ border-color:var(--accent); color:var(--accent-ink); background:rgba(76,141,255,.14); }
   .mode-btn.active .mode-name{ color:var(--text); }
 
@@ -342,7 +343,6 @@
 </style>
 </head>
 <body>
-
 <div class="outer">
   <div class="stage" id="stage">
 
@@ -351,7 +351,7 @@
       <div class="top-row">
         <div class="brand">
           <svg class="plane" viewBox="0 0 24 24" fill="currentColor"><path d="M22 16v-2l-8.5-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8.5-2.6V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.6L22 16z"/></svg>
-          <span class="brand-text">MENTORIA V1 - TEMPOS VERBAIS</span>
+          <span class="brand-text">MENTORIA V1 - VIVIAN BISPO</span>
         </div>
         <div class="timeleft">
           <span class="t mono" id="qTimerVal">0:45</span>
@@ -370,7 +370,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
         </div>
         <h1 class="gate-title">Acesso restrito</h1>
-        <p class="gate-sub">Digite a senha que a Vivian passou pra você para entrar na Mentoria V1.</p>
+        <p class="gate-sub">Digite seu nome, seu e-mail cadastrado na mentoria e a senha que a Vivian passou pra você.</p>
+        <input type="text" id="gateName" class="gate-input gate-field" placeholder="Nome completo" autocomplete="name">
+        <input type="email" id="gateEmail" class="gate-input gate-field" placeholder="E-mail cadastrado na mentoria" autocomplete="email">
         <input type="password" id="gatePassword" class="gate-input" placeholder="Senha" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
         <label class="gate-showpass"><input type="checkbox" id="gateShowPass"> Mostrar senha</label>
         <p class="gate-error" id="gateError" hidden>Senha incorreta. Tente de novo.</p>
@@ -394,28 +396,17 @@
           <span class="badge-icon-label">Mentoria V1</span>
         </div>
         <div>
-          <p class="eyebrow">Simulado de inglês estilo Gupy · tempos verbais, preposições e vocabulário</p>
-          <h1>Tempos Verbais</h1>
+          <p class="eyebrow">Simulado de inglês estilo Gupy · níveis A2 a C1</p>
+          <h1>Estrutura &amp; Vocabulário</h1>
         </div>
         <div class="stat-strip">
           <div class="stat"><div class="v mono">12</div><div class="k">Perguntas</div></div>
           <div class="stat"><div class="v mono" id="statTime">0:45</div><div class="k">Por questão</div></div>
           <div class="stat"><div class="v mono" id="statTotalTime">9:00</div><div class="k">Tempo total</div></div>
         </div>
-        <div class="mode-picker">
-          <div class="mode-label">Nível de dificuldade</div>
-          <div class="mode-options" id="diffOptions">
-            <button type="button" class="mode-btn active" data-diff="easy">
-              <span class="mode-name">Iniciante</span><span class="mode-time mono">A1–B1</span>
-            </button>
-            <button type="button" class="mode-btn" data-diff="medium">
-              <span class="mode-name">Intermediário</span><span class="mode-time mono">B1–B2</span>
-            </button>
-            <button type="button" class="mode-btn" data-diff="hard">
-              <span class="mode-name">Avançado</span><span class="mode-time mono">C1+</span>
-            </button>
-          </div>
-        </div>
+        <p class="intro-note">Tempo máximo para realizar o teste: <b><span id="introMaxTime" class="mono">9:00</span></b>.<br>
+          Lembre-se de reservar um tempo para revisar as respostas. A partir do momento que você clicar em "Começar" o tempo começará a ser contado. Não esqueça de marcar a alternativa de cada questão antes de clicar em "Continuar".<br>
+          Caso você tenha algum problema externo ou de conexão, você pode pausar o teste a qualquer momento (ícone de pausa) e retomar de onde parou.</p>
         <div class="mode-picker">
           <div class="mode-label">Modo de resolução</div>
           <div class="mode-options" id="modeOptions">
@@ -488,7 +479,7 @@
           <div id="reviewList"></div>
         </div>
         <button class="btn ghost" id="btnRetry">Refazer quiz</button>
-        <footer class="credit">Vivian Bispo · Teacher Mentora de Comissários de Voo<br>Prática pessoal · tempos verbais, preposições e vocabulário</footer>
+        <footer class="credit">Vivian Bispo · Teacher Mentora de Comissários de Voo<br>Prática pessoal · estrutura e vocabulário</footer>
       </section>
 
     </div>
@@ -505,578 +496,346 @@
   "use strict";
 
   var QUESTION_TIME = 45; // seconds — set by the selected resolution mode
-  var selectedDiff = "easy"; // "easy" | "medium" | "hard" — set by the difficulty picker
 
-  // Full question bank: 3 difficulty tiers (easy = A1-B1, medium = B1-B2, hard = C1+),
-  // 24 questions per tier (16 "tempo" + 4 "prep" + 4 "voc"). Each quiz attempt draws
-  // 8 tempo + 2 prep + 2 voc at random from the selected tier's pool, then shuffles order.
+  // Full question bank (112 items, levels A2-C1, options A-D). Each quiz attempt
+  // draws 12 at random from the whole bank, mixing every level.
   var ALL_Q = [
-
-    /* ================= EASY (A1-B1) — 16 tempos verbais ================= */
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Verbo to be", stem:"This <b>___</b> my first flight as a passenger.",
-      opts:["is","are","am","be"], correct:0,
-      why:"Sujeito na 3ª pessoa do singular (\"This\") usa <b>is</b> do verbo \"to be\"." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Presente simples", stem:"The flight attendant always <b>___</b> the safety instructions before takeoff.",
-      opts:["explains","explain","is explain","explaining"], correct:0,
-      why:"3ª pessoa do singular no presente simples: verbo + <b>-s</b> (\"explains\")." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Presente contínuo", stem:"Look! The passengers <b>___</b> the plane right now.",
-      opts:["are boarding","board","boards","boarded"], correct:0,
-      why:"Ação acontecendo neste momento usa <b>presente contínuo</b>: \"are boarding\"." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Passado simples (regular)", stem:"We <b>___</b> (land) in Lisbon two hours ago.",
-      opts:["landed","land","lands","was landed"], correct:0,
-      why:"Verbo regular no passado simples recebe <b>-ed</b>: \"landed\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Passado simples (irregular)", stem:"She <b>___</b> (fly) to Paris last summer for the first time.",
-      opts:["flew","flied","flying","fly"], correct:0,
-      why:"\"Fly\" é verbo irregular: o passado simples é <b>flew</b>, não \"flied\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente perfeito", stem:"I <b>___</b> (never / be) on such a long flight before.",
-      opts:["have never been","has never been","never was","was never being"], correct:0,
-      why:"Experiência de vida sem tempo definido usa <b>present perfect</b>: \"have never been\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Futuro (will)", stem:"The phone is ringing — I think I <b>___</b> answer it.",
-      opts:["will","am going to","would","am"], correct:0,
-      why:"Decisão espontânea tomada no momento da fala usa <b>will</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Futuro (going to)", stem:"Look at the schedule — the flight <b>___</b> depart at 9 a.m.",
-      opts:["is going to","will","would","is"], correct:0,
-      why:"Plano já definido com evidência concreta (o horário no quadro) usa <b>going to</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente contínuo (futuro)", stem:"We <b>___</b> (travel) to Rome next Friday — it's already booked.",
-      opts:["are traveling","travel","will traveling","travelled"], correct:0,
-      why:"Plano confirmado e agendado para o futuro próximo usa <b>presente contínuo</b>: \"are traveling\"." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Passado contínuo", stem:"I <b>___</b> (read) a magazine when the turbulence started.",
-      opts:["was reading","read","have read","am reading"], correct:0,
-      why:"Ação em andamento no passado, interrompida por outra ação pontual, usa <b>past continuous</b>: \"was reading\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Verbo modal (habilidade)", stem:"She <b>___</b> speak three languages fluently.",
-      opts:["can","must","should","would"], correct:0,
-      why:"Habilidade/capacidade no presente é expressa pelo modal <b>can</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Verbo modal (obrigação)", stem:"Passengers <b>___</b> keep their seatbelts fastened when the sign is on.",
-      opts:["must","can","might","would"], correct:0,
-      why:"Regra/obrigação de segurança usa o modal <b>must</b>." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Imperativo", stem:"<b>___</b> your seatbelt before the plane takes off, please.",
-      opts:["Fasten","Fastening","Fastens","To fasten"], correct:0,
-      why:"O imperativo usa o verbo na <b>forma base</b>, sem sujeito: \"Fasten\"." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"There is / there are", stem:"<b>___</b> two empty seats near the emergency exit.",
-      opts:["There are","There is","It is","There has"], correct:0,
-      why:"Sujeito plural (\"seats\") pede <b>there are</b>, não \"there is\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Passado simples (negativo)", stem:"The plane <b>___</b> (not / land) on time because of the storm.",
-      opts:["didn't land","not landed","doesn't land","wasn't landing"], correct:0,
-      why:"Negativa no passado simples: <b>didn't</b> + verbo na forma base (\"didn't land\")." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Presente perfeito x passado", stem:"I <b>___</b> (already / check) the boarding gate, so we can relax now.",
-      opts:["have already checked","already checked","was already checking","already check"], correct:0,
-      why:"Ação concluída recentemente e relevante para o presente usa <b>present perfect</b>: \"have already checked\"." },
-
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Presente simples (negativo)", stem:"She <b>___</b> (not / work) on weekends.",
-      opts:["doesn't work","don't work","not works","isn't work"], correct:0,
-      why:"Negativa no presente simples com sujeito na 3ª pessoa: <b>doesn't</b> + verbo na forma base." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Presente simples (pergunta)", stem:"<b>___</b> she usually arrive early for her shift?",
-      opts:["Does","Do","Is","Has"], correct:0,
-      why:"Pergunta no presente simples com sujeito na 3ª pessoa usa o auxiliar <b>does</b>." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Verbo to be (passado)", stem:"The flight <b>___</b> very long yesterday.",
-      opts:["was","were","is","be"], correct:0,
-      why:"Sujeito singular (\"the flight\") no passado do verbo \"to be\" usa <b>was</b>." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Verbo to be (passado negativo)", stem:"The passengers <b>___</b> happy about the delay.",
-      opts:["weren't","wasn't","didn't","aren't"], correct:0,
-      why:"Sujeito plural (\"passengers\") no passado negativo do verbo \"to be\" usa <b>weren't</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente contínuo (negativo)", stem:"The crew <b>___</b> (not / serve) breakfast right now — it's too early.",
-      opts:["isn't serving","doesn't serve","aren't serving","wasn't serving"], correct:0,
-      why:"\"Crew\" é tratado como sujeito singular aqui: negativa do presente contínuo com <b>isn't serving</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Futuro (will, negativo)", stem:"Don't worry, the plane <b>___</b> leave without you.",
-      opts:["won't","isn't","doesn't","wasn't"], correct:0,
-      why:"Negativa do futuro com \"will\": <b>won't</b> + verbo na forma base." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Futuro (going to, negativo)", stem:"We <b>___</b> (not / land) on time because of the traffic in the sky.",
-      opts:["aren't going to land","don't going to land","won't going to land","isn't going land"], correct:0,
-      why:"Negativa de \"going to\": <b>be (aren't) + not... going to</b> + verbo na forma base." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente perfeito (for)", stem:"I <b>___</b> (live) in this city for six years.",
-      opts:["have lived","lived","am living","was living"], correct:0,
-      why:"\"For six years\" marca duração até o presente — usa-se o <b>present perfect</b>: \"have lived\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente perfeito (yet)", stem:"The pilot <b>___</b> (not / announce) the delay yet.",
-      opts:["hasn't announced","didn't announce","doesn't announce","isn't announcing"], correct:0,
-      why:"\"Yet\" em frases negativas é um marcador clássico do <b>present perfect</b>: \"hasn't announced\"." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Passado contínuo (pergunta)", stem:"What <b>___</b> you doing when the alarm went off?",
-      opts:["were","did","are","have"], correct:0,
-      why:"Pergunta sobre uma ação em andamento no passado usa <b>past continuous</b>: \"were you doing\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Verbo modal (conselho)", stem:"It's a good idea, but not a strict rule: you <b>___</b> get some rest before a long flight.",
-      opts:["should","must","can","would"], correct:0,
-      why:"Conselho, não obrigação: usa-se o modal <b>should</b>." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Verbo modal (possibilidade)", stem:"The flight <b>___</b> be delayed if the storm continues.",
-      opts:["might","must","can","should"], correct:0,
-      why:"Possibilidade incerta sobre o futuro usa o modal <b>might</b>." },
-    { diff:"easy", level:"A1", cat:"tempo", tag:"Presente simples (plural)", stem:"Flight attendants <b>___</b> (wear) uniforms during their shifts.",
-      opts:["wear","wears","is wearing","wore"], correct:0,
-      why:"Sujeito plural (\"flight attendants\") no presente simples não recebe <b>-s</b>: \"wear\"." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente simples (pergunta 2)", stem:"<b>___</b> you like your new schedule?",
-      opts:["Do","Does","Are","Have"], correct:0,
-      why:"Pergunta no presente simples com sujeito \"you\" usa o auxiliar <b>do</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Passado simples (to have)", stem:"We <b>___</b> a great flight last week.",
-      opts:["had","have","has","having"], correct:0,
-      why:"Passado simples de \"have\": <b>had</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Presente contínuo (pergunta)", stem:"<b>___</b> the passengers boarding already?",
-      opts:["Are","Is","Do","Have"], correct:0,
-      why:"Sujeito plural (\"passengers\") no presente contínuo usa o auxiliar <b>are</b>." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Futuro (going to, pergunta)", stem:"<b>___</b> you going to check in online tonight?",
-      opts:["Are","Do","Will","Is"], correct:0,
-      why:"Pergunta com \"going to\" usa o verbo \"to be\": <b>Are you going to...?</b>" },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Verbo modal (obrigação externa)", stem:"Crew members <b>___</b> complete a safety training every year.",
-      opts:["have to","must to","can","should to"], correct:0,
-      why:"Obrigação imposta por regra externa usa <b>have to</b> + verbo na forma base; \"must to\" e \"should to\" não existem." },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Passado simples (negativo, irregular)", stem:"They <b>___</b> (not / go) to the gate on time.",
-      opts:["didn't go","not went","doesn't go","didn't went"], correct:0,
-      why:"Negativa do passado simples: <b>didn't</b> + verbo na forma base (\"didn't go\"), nunca o particípio." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Presente perfeito (ever)", stem:"<b>___</b> you ever worked on an international flight?",
-      opts:["Have","Has","Did","Do"], correct:0,
-      why:"\"Ever\" em perguntas sobre experiência de vida usa <b>present perfect</b>: \"Have you ever...?\"" },
-    { diff:"easy", level:"A2", cat:"tempo", tag:"Futuro (decisão espontânea)", stem:"I'm thirsty. I <b>___</b> get some water.",
-      opts:["will","am going to","would","was going to"], correct:0,
-      why:"Decisão tomada no momento da fala usa <b>will</b>, não \"going to\" (que pede plano já feito antes)." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Verbo modal (habilidade no passado)", stem:"When she was younger, she <b>___</b> speak only Portuguese.",
-      opts:["could","can","must","would"], correct:0,
-      why:"Habilidade no passado usa o modal <b>could</b> (passado de \"can\")." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Presente contínuo x simples", stem:"She usually <b>___</b> (work) mornings, but today she <b>___</b> (work) an evening shift.",
-      opts:["works / is working","is working / works","worked / working","work / works"], correct:0,
-      why:"Hábito geral usa <b>presente simples</b> (\"works\"); exceção pontual de hoje usa <b>presente contínuo</b> (\"is working\")." },
-    { diff:"easy", level:"B1", cat:"tempo", tag:"Passado simples (irregular 2)", stem:"The captain <b>___</b> (tell) us to remain seated.",
-      opts:["told","telled","tells","was tell"], correct:0,
-      why:"\"Tell\" é verbo irregular: o passado simples é <b>told</b>, não \"telled\"." },
-
-    /* ================= EASY (A1-B1) — 4 preposição ================= */
-    { diff:"easy", level:"A1", cat:"prep", tag:"Preposição dependente", stem:"The flight attendant is responsible <b>___</b> passenger safety.",
-      opts:["for","of","in","at"], correct:0,
-      why:"\"Responsible\" combina com a preposição <b>for</b>: \"responsible for something\"." },
-    { diff:"easy", level:"A2", cat:"prep", tag:"Preposição de lugar", stem:"We arrived <b>___</b> the airport two hours before departure.",
-      opts:["at","in","on","to"], correct:0,
-      why:"Para chegar em um ponto específico (como um aeroporto), usa-se <b>arrive at</b>." },
-    { diff:"easy", level:"A2", cat:"prep", tag:"Preposição de tempo", stem:"Boarding starts <b>___</b> 7:30 <b>___</b> the morning.",
-      opts:["at / in","in / at","on / in","at / on"], correct:0,
-      why:"Horários usam <b>at</b> (\"at 7:30\") e períodos do dia usam <b>in</b> (\"in the morning\")." },
-    { diff:"easy", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"She's very good <b>___</b> dealing with nervous passengers.",
+    { level:"B1", tag:"Preposição dependente", stem:"She has always been very good <b>___</b> dealing with difficult passengers.",
       opts:["at","in","for","with"], correct:0,
-      why:"O adjetivo \"good\" pede a preposição <b>at</b> quando seguido de habilidade/atividade." },
-
-    { diff:"easy", level:"A2", cat:"prep", tag:"Preposição de lugar", stem:"The suitcase is <b>___</b> the overhead bin.",
-      opts:["in","on","at","to"], correct:0,
-      why:"Para algo dentro de um espaço fechado (como um compartimento), usa-se <b>in</b>." },
-    { diff:"easy", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"She's afraid <b>___</b> flying, but she still loves her job.",
-      opts:["of","from","for","with"], correct:0,
-      why:"\"Afraid\" combina com a preposição <b>of</b>: \"afraid of something\"." },
-    { diff:"easy", level:"A2", cat:"prep", tag:"Preposição (meio de transporte)", stem:"We usually travel <b>___</b> plane rather than by train.",
-      opts:["by","in","on","with"], correct:0,
-      why:"Meios de transporte usam <b>by</b>: \"by plane\", \"by car\", \"by train\"." },
-    { diff:"easy", level:"A2", cat:"prep", tag:"Preposição de lugar", stem:"The gate is <b>___</b> the end of the corridor.",
-      opts:["at","in","on","to"], correct:0,
-      why:"\"At the end of\" é a expressão fixa para indicar a extremidade de um lugar." },
-    { diff:"easy", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"He's interested <b>___</b> becoming a pilot one day.",
-      opts:["in","at","for","with"], correct:0,
-      why:"\"Interested\" combina com a preposição <b>in</b>: \"interested in something\"." },
-    { diff:"easy", level:"B1", cat:"prep", tag:"Expressão preposicionada", stem:"The plane took off <b>___</b> schedule this morning.",
-      opts:["on","in","at","by"], correct:0,
-      why:"<b>On schedule</b> é uma expressão fixa que significa \"no horário previsto\"." },
-
-    /* ================= EASY (A1-B1) — 4 vocabulário/sinônimo ================= */
-    { diff:"easy", level:"A2", cat:"voc", tag:"Vocabulário · antônimo", stem:"Choose the opposite of \"early\" in: \"Try not to be early for the briefing.\"",
-      opts:["late","quick","ready","close"], correct:0,
-      why:"\"Early\" (cedo/adiantado) é o oposto de <b>late</b> (atrasado/tarde)." },
-    { diff:"easy", level:"A2", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"happy\" in: \"The passengers looked happy when the delay ended.\"",
-      opts:["pleased","angry","tired","confused"], correct:0,
-      why:"\"Happy\" (feliz) tem como sinônimo mais próximo <b>pleased</b> (contente, satisfeito)." },
-    { diff:"easy", level:"B1", cat:"voc", tag:"Vocabulário · cotidiano", stem:"Choose the best word to complete: \"Can you help me ___ the trolley down the aisle?\"",
-      opts:["push","make","do","take"], correct:0,
-      why:"A collocation correta é <b>push the trolley</b> (empurrar o carrinho)." },
-    { diff:"easy", level:"B1", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"delay\" in: \"There was a short delay before boarding began.\"",
-      opts:["hold-up","discount","upgrade","refund"], correct:0,
-      why:"\"Delay\" (atraso) tem como sinônimo mais próximo <b>hold-up</b> (contratempo, atraso)." },
-
-    { diff:"easy", level:"B1", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"tired\" in: \"After the night shift, she felt tired.\"",
-      opts:["sleepy","excited","nervous","curious"], correct:0,
-      why:"\"Tired\" (cansado) tem como sinônimo mais próximo <b>sleepy</b> (sonolento)." },
-    { diff:"easy", level:"A2", cat:"voc", tag:"Vocabulário · antônimo", stem:"Choose the opposite of \"big\" in: \"The aircraft was too big for that runway.\"",
-      opts:["small","fast","old","loud"], correct:0,
-      why:"\"Big\" (grande) é o oposto de <b>small</b> (pequeno)." },
-    { diff:"easy", level:"A2", cat:"voc", tag:"Vocabulário · cotidiano", stem:"Choose the best word to complete: \"It's time to ___ a decision about the schedule.\"",
-      opts:["make","do","take","have"], correct:0,
-      why:"A collocation correta é <b>make a decision</b> (tomar uma decisão)." },
-    { diff:"easy", level:"B1", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"friendly\" in: \"The new colleague is very friendly.\"",
-      opts:["kind","rude","quiet","strict"], correct:0,
-      why:"\"Friendly\" (amigável) tem como sinônimo mais próximo <b>kind</b> (gentil)." },
-    { diff:"easy", level:"B1", cat:"voc", tag:"Vocabulário · antônimo", stem:"Choose the opposite of \"difficult\" in: \"The training was quite difficult at first.\"",
-      opts:["easy","long","short","cheap"], correct:0,
-      why:"\"Difficult\" (difícil) é o oposto de <b>easy</b> (fácil)." },
-    { diff:"easy", level:"A2", cat:"voc", tag:"Vocabulário · cotidiano", stem:"Choose the best word to complete: \"Let's ___ a break before the next flight.\"",
-      opts:["take","do","make","catch"], correct:0,
-      why:"A collocation correta é <b>take a break</b> (fazer uma pausa)." },
-
-    /* ================= MEDIUM (B1-B2) — 16 tempos verbais ================= */
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Passado perfeito", stem:"By the time the passengers boarded, the crew <b>___</b> (already / complete) the safety checks.",
-      opts:["had already completed","already completed","have already completed","was already completing"], correct:0,
-      why:"Ação concluída antes de outro momento no passado usa <b>past perfect</b>: \"had already completed\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Passado perfeito contínuo", stem:"She was exhausted because she <b>___</b> (work) for twelve hours straight.",
-      opts:["had been working","was working","has been working","had worked"], correct:0,
-      why:"Duração de uma ação até um ponto no passado usa <b>past perfect continuous</b>: \"had been working\"." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Presente perfeito contínuo", stem:"I <b>___</b> (study) English for three years, and I still love it.",
-      opts:["have been studying","have studied","was studying","studied"], correct:0,
-      why:"Ação iniciada no passado e que continua até agora, com ênfase na duração, usa <b>present perfect continuous</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Futuro contínuo", stem:"This time tomorrow, we <b>___</b> (fly) over the Atlantic.",
-      opts:["will be flying","will fly","are flying","would fly"], correct:0,
-      why:"Ação em andamento em um ponto específico do futuro usa <b>future continuous</b>: \"will be flying\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Futuro perfeito", stem:"By next year, she <b>___</b> (work) as a flight attendant for a decade.",
-      opts:["will have worked","will work","will be working","has worked"], correct:0,
-      why:"Ação que estará concluída antes de um ponto no futuro usa <b>future perfect</b>: \"will have worked\"." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Condicional (tipo 1)", stem:"If the fog <b>___</b> (not / clear) soon, all flights will be delayed.",
-      opts:["doesn't clear","won't clear","didn't clear","isn't clearing"], correct:0,
-      why:"Primeiro condicional (situação real/possível no futuro): <b>if + presente simples</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Condicional (tipo 2)", stem:"If I <b>___</b> (have) more experience, I would apply for the senior crew position.",
-      opts:["had","have","would have","has"], correct:0,
-      why:"Segundo condicional (situação hipotética): <b>if + passado simples</b> (\"had\"), \"would\" na oração principal." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Voz passiva (presente)", stem:"Choose the passive form of: \"The company checks every uniform before each shift.\"",
-      opts:["Every uniform is checked by the company before each shift.","Every uniform checks by the company before each shift.","Every uniform was checked by the company before each shift.","Every uniform is checking by the company before each shift."], correct:0,
-      why:"Presente simples na voz passiva: <b>be (is) + particípio (checked)</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva (passado)", stem:"Choose the passive form of: \"The airline delayed the flight because of the strike.\"",
-      opts:["The flight was delayed by the airline because of the strike.","The flight has delayed by the airline because of the strike.","The flight was delaying by the airline because of the strike.","The airline was delayed the flight because of the strike."], correct:0,
-      why:"Passado simples na voz passiva: <b>was + particípio</b> (\"was delayed\")." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva (presente perfeito)", stem:"Choose the passive form of: \"Someone has already announced the gate change.\"",
-      opts:["The gate change has already been announced.","The gate change has already announced.","The gate change was already announced.","The gate change is already been announced."], correct:0,
-      why:"Present perfect na voz passiva: <b>have/has been + particípio</b> → \"has already been announced\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Discurso indireto", stem:"The captain said: \"We are flying at 30,000 feet.\" In reported speech:",
-      opts:["The captain said that they were flying at 30,000 feet.","The captain said that they are flying at 30,000 feet.","The captain said that they fly at 30,000 feet.","The captain said that they would fly at 30,000 feet."], correct:0,
-      why:"Backshift: presente contínuo (\"are flying\") recua para <b>past continuous</b> (\"were flying\") no discurso relatado." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Discurso indireto (pergunta)", stem:"A passenger asked: \"What time does the flight land?\" In reported speech:",
-      opts:["The passenger asked what time the flight landed.","The passenger asked what time does the flight land.","The passenger asked what time the flight lands.","The passenger asked what time did the flight land."], correct:0,
-      why:"Perguntas relatadas mantêm a ordem afirmativa e recuam o tempo verbal: \"does... land\" vira <b>landed</b>, sem inversão nem auxiliar." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Verbo modal (dedução no presente)", stem:"The cabin lights are off — the crew <b>___</b> be preparing for landing.",
-      opts:["must","can","would","should"], correct:0,
+      why:"O adjetivo \"good\" pede a preposição <b>at</b> quando seguido de atividade/habilidade: \"good at doing something\"." },
+    { level:"B1", tag:"Voz passiva", stem:"Choose the passive form of: \"The airline canceled the flight due to bad weather.\"",
+      opts:["The flight was canceled by the airline due to bad weather.","The flight has canceled by the airline due to bad weather.","The flight was canceling by the airline due to bad weather.","The airline was canceled the flight due to bad weather."], correct:0,
+      why:"Voz passiva no passado simples: <b>be (was) + particípio (canceled)</b>, mantendo o mesmo tempo verbal da frase ativa original." },
+    { level:"B2", tag:"Discurso indireto", stem:"The flight attendant said: \"I have already checked the safety equipment.\" In reported speech:",
+      opts:["The flight attendant said that she has already checked the safety equipment.","The flight attendant said that she had already checked the safety equipment.","The flight attendant said that she already checked the safety equipment.","The flight attendant said that she already checks the safety equipment."], correct:1,
+      why:"Regra do backshift: present perfect (\"have checked\") recua para <b>past perfect (\"had checked\")</b> quando relatado com verbo de elocução no passado (\"said\")." },
+    { level:"B1", tag:"Pronome relativo", stem:"The passenger <b>___</b> luggage was lost filed a complaint at the counter.",
+      opts:["who","which","whose","whom"], correct:2,
+      why:"<b>Whose</b> indica posse (\"o passageiro CUJA bagagem\"). \"Who/which/that\" não expressam posse, e \"whom\" é objeto, não possessivo." },
+    { level:"B2", tag:"Conectivo concessivo", stem:"<b>___</b> the turbulence, the crew remained calm and continued the service.",
+      opts:["Because","Despite","Since","So that"], correct:1,
+      why:"Depois do conectivo vem apenas um substantivo (\"the turbulence\"), não uma oração com verbo — por isso <b>Despite</b> (+ substantivo) é o correto, e não \"Although\" (que exigiria sujeito + verbo)." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"This is by far <b>___</b> flight I've ever taken.",
+      opts:["the smoothest","the more smooth","the most smooth","smoother"], correct:0,
+      why:"\"Smooth\" é adjetivo curto (uma sílaba): superlativo com <b>-est</b> → <b>the smoothest</b>, sem \"more/most\"." },
+    { level:"A2", tag:"Verbo modal", stem:"Passengers <b>___</b> fasten their seatbelts during takeoff and landing.",
+      opts:["can","might","must","would"], correct:2,
+      why:"A frase expressa obrigação/regra de segurança, sentido do modal <b>must</b>. Os demais expressam capacidade, possibilidade ou hipótese." },
+    { level:"A2", tag:"Presente perfeito", stem:"I <b>___</b> never <b>___</b> (be) to Japan, but I'm flying there next month.",
+      opts:["have / been","has / been","had / been","was / being"], correct:0,
+      why:"Sujeito \"I\" + experiência de vida sem tempo definido → present perfect: <b>have never been</b>." },
+    { level:"A2", tag:"Phrasal verb", stem:"The plane finally <b>___</b> off after a two-hour delay.",
+      opts:["took","taken","take","was take"], correct:0,
+      why:"\"Take off\" (decolar) no passado simples: <b>took off</b>. As demais formas não existem ou misturam tempos verbais incorretamente." },
+    { level:"B1", tag:"Question tag", stem:"You've worked as a flight attendant for five years, <b>___</b>?",
+      opts:["haven't you","don't you","didn't you","have you"], correct:0,
+      why:"A frase-base usa present perfect afirmativo (\"You've worked\"); a question tag espelha o auxiliar em forma negativa: <b>haven't you</b>." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"mandatory\" in: \"Wearing the uniform correctly is mandatory for all crew members.\"",
+      opts:["optional","recommended","obligatory","flexible"], correct:2,
+      why:"\"Mandatory\" = compulsório, obrigatório. <b>Obligatory</b> é o sinônimo direto; os demais indicam o oposto ou algo não obrigatório." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"Even during the emergency landing, she managed to keep her cool.\" The expression \"keep her cool\" means:",
+      opts:["stay calm","lose her temper","feel cold","act quickly"], correct:0,
+      why:"\"Keep your cool\" é um idiom para <b>manter a calma</b> sob pressão — o oposto de \"lose your temper\" (perder a paciência)." },
+    { level:"B1", tag:"Preposição dependente", stem:"The captain is responsible <b>___</b> the safety of everyone on board.",
+      opts:["of","for","with","about"], correct:1,
+      why:"\"Responsible\" combina com a preposição <b>for</b>: \"responsible for something\"." },
+    { level:"B1", tag:"Preposição dependente", stem:"I'm really looking forward <b>___</b> my next flight to Lisbon.",
+      opts:["to","for","at","on"], correct:0,
+      why:"\"Look forward to\" é seguido de \"to\" + substantivo/gerúndio: <b>looking forward to</b> my flight." },
+    { level:"A2", tag:"Preposição dependente", stem:"She apologized <b>___</b> the delay before the boarding started.",
+      opts:["for","of","about","with"], correct:0,
+      why:"\"Apologize\" combina com <b>for</b> quando seguido do motivo do pedido de desculpas." },
+    { level:"B1", tag:"Preposição dependente", stem:"New crew members are trained to deal <b>___</b> emergency situations calmly.",
+      opts:["with","of","for","in"], correct:0,
+      why:"\"Deal\" combina com <b>with</b>: \"deal with a situation\"." },
+    { level:"B1", tag:"Voz passiva", stem:"Choose the passive form of: \"The company trains all new flight attendants every year.\"",
+      opts:["All new flight attendants are trained by the company every year.","All new flight attendants have trained by the company every year.","All new flight attendants was trained by the company every year.","The company are trained all new flight attendants every year."], correct:0,
+      why:"Presente simples na voz passiva: <b>be (are) + particípio (trained)</b>, mantendo o sujeito plural \"flight attendants\"." },
+    { level:"B2", tag:"Voz passiva", stem:"Choose the passive form of: \"They will announce the gate change soon.\"",
+      opts:["The gate change will be announced soon.","The gate change will announced soon.","The gate change is announced soon.","The gate change will be announce soon."], correct:0,
+      why:"Futuro com \"will\" na voz passiva: <b>will be + particípio</b> → \"will be announced\"." },
+    { level:"B2", tag:"Voz passiva", stem:"Choose the passive form of: \"Someone has already checked the emergency exits.\"",
+      opts:["The emergency exits have already been checked.","The emergency exits has already been checked.","The emergency exits were already checked.","The emergency exits have already checked."], correct:0,
+      why:"Present perfect na voz passiva: <b>have/has been + particípio</b>. Sujeito plural \"exits\" pede \"have\", não \"has\"." },
+    { level:"B2", tag:"Voz passiva", stem:"Choose the passive form of: \"The airline is currently reviewing the new uniform policy.\"",
+      opts:["The new uniform policy is currently being reviewed by the airline.","The new uniform policy is currently reviewed by the airline.","The new uniform policy is currently being review by the airline.","The new uniform policy currently being reviewed by the airline."], correct:0,
+      why:"Presente contínuo na voz passiva: <b>is/are being + particípio</b> → \"is being reviewed\"." },
+    { level:"B2", tag:"Discurso indireto", stem:"The pilot said: \"We will land in twenty minutes.\" In reported speech:",
+      opts:["The pilot said that they would land in twenty minutes.","The pilot said that they will land in twenty minutes.","The pilot said that they land in twenty minutes.","The pilot said that they would landed in twenty minutes."], correct:0,
+      why:"Backshift: \"will\" recua para <b>would</b> quando relatado com verbo de elocução no passado (\"said\")." },
+    { level:"B2", tag:"Discurso indireto", stem:"A passenger asked: \"Where is the nearest restroom?\" In reported speech:",
+      opts:["The passenger asked where the nearest restroom was.","The passenger asked where was the nearest restroom.","The passenger asked where is the nearest restroom.","The passenger asked where the nearest restroom is."], correct:0,
+      why:"Perguntas relatadas mantêm a ordem afirmativa (sujeito + verbo) e recuam o tempo verbal: <b>was</b> no lugar de \"is\", sem inversão." },
+    { level:"B2", tag:"Discurso indireto", stem:"She said: \"I can't find my boarding pass.\" In reported speech:",
+      opts:["She said that she couldn't find her boarding pass.","She said that she can't find her boarding pass.","She said that she can't found her boarding pass.","She said that she couldn't found her boarding pass."], correct:0,
+      why:"Backshift: \"can't\" recua para <b>couldn't</b>; o pronome possessivo também muda para acompanhar o sujeito (\"her\", não \"my\")." },
+    { level:"B2", tag:"Discurso indireto", stem:"The instructor told the trainees: \"Don't forget to check the oxygen masks.\" In reported speech:",
+      opts:["The instructor told the trainees not to forget to check the oxygen masks.","The instructor told the trainees don't forget to check the oxygen masks.","The instructor told the trainees to not forgetting to check the oxygen masks.","The instructor told the trainees didn't forget to check the oxygen masks."], correct:0,
+      why:"Imperativo negativo relatado vira infinitivo negativo: <b>not to + verbo</b> → \"not to forget\"." },
+    { level:"A2", tag:"Pronome relativo", stem:"The airport <b>___</b> we landed was much bigger than expected.",
+      opts:["where","which","who","whose"], correct:0,
+      why:"Depois de um lugar (\"the airport\"), usa-se o pronome relativo de lugar <b>where</b>." },
+    { level:"B2", tag:"Pronome relativo", stem:"The captain, <b>___</b> has flown for over twenty years, trained most of the crew.",
+      opts:["who","which","whose","that"], correct:0,
+      why:"\"Who\" retoma \"the captain\" (pessoa) como sujeito da oração; \"that\" não é usado em orações explicativas separadas por vírgula." },
+    { level:"A2", tag:"Pronome relativo", stem:"This is the moment <b>___</b> the whole crew feels proudest.",
+      opts:["when","which","who","whose"], correct:0,
+      why:"Depois de uma expressão de tempo (\"the moment\"), usa-se o pronome relativo <b>when</b>." },
+    { level:"B1", tag:"Pronome relativo", stem:"Passengers <b>___</b> tickets were upgraded were seated in business class.",
+      opts:["whose","who","which","whom"], correct:0,
+      why:"<b>Whose</b> indica posse: \"passageiros CUJAS passagens foram atualizadas\"." },
+    { level:"B1", tag:"Conectivo", stem:"<b>___</b> she was exhausted after the long flight, she still smiled at every passenger.",
+      opts:["Although","Despite","Because of","So"], correct:0,
+      why:"Antes de uma oração completa (sujeito + verbo: \"she was exhausted\"), usa-se <b>Although</b>, não \"Despite\" (que pede substantivo/gerúndio)." },
+    { level:"A2", tag:"Conectivo", stem:"The flight was delayed <b>___</b> the heavy storm over the airport.",
+      opts:["because","because of","although","so that"], correct:1,
+      why:"Antes de um substantivo (\"the heavy storm\"), usa-se <b>because of</b>; \"because\" pede uma oração com verbo." },
+    { level:"B2", tag:"Conectivo", stem:"She spoke slowly and clearly <b>___</b> everyone could understand the safety instructions.",
+      opts:["so that","because of","despite","in spite of"], correct:0,
+      why:"<b>So that</b> introduz finalidade/propósito (\"para que todos entendessem\")." },
+    { level:"B2", tag:"Conectivo", stem:"The crew kept working <b>___</b> the turbulence got worse.",
+      opts:["even though","despite","because of","so"], correct:0,
+      why:"Antes de uma oração completa (\"the turbulence got worse\"), usa-se <b>even though</b>, equivalente a \"although\"." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"This new aircraft is <b>___</b> than the previous model.",
+      opts:["more modern","modernner","the most modern","modern"], correct:0,
+      why:"\"Modern\" é adjetivo longo: comparativo com <b>more</b> + adjetivo, sem sufixo -er." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"Of all the destinations she has visited, Tokyo was <b>___</b>.",
+      opts:["the most exciting","the excitingest","more exciting","most excitinger"], correct:0,
+      why:"\"Exciting\" é adjetivo longo: superlativo com <b>the most</b> + adjetivo, sem sufixo -est." },
+    { level:"A2", tag:"Comparativo / superlativo", stem:"The line at check-in today is <b>___</b> it was yesterday.",
+      opts:["as long as","more long than","longer as","the longest than"], correct:0,
+      why:"Comparação de igualdade: <b>as + adjetivo + as</b> → \"as long as\"." },
+    { level:"A2", tag:"Verbo modal", stem:"You <b>___</b> bring liquids over 100ml in your carry-on — it's against the rules.",
+      opts:["mustn't","don't have to","might not","shouldn't have to"], correct:0,
+      why:"Proibição (regra que não pode ser quebrada) usa <b>mustn't</b>. \"Don't have to\" indica ausência de obrigação, não proibição." },
+    { level:"B2", tag:"Verbo modal", stem:"She <b>___</b> be at the gate by now — her flight boarded twenty minutes ago.",
+      opts:["must","might","can","would"], correct:0,
       why:"Dedução lógica sobre o presente (\"com certeza está\") usa <b>must</b> + infinitivo sem \"to\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Verbo modal (crítica ao passado)", stem:"You <b>___</b> have called the supervisor before changing the schedule.",
+    { level:"A2", tag:"Verbo modal", stem:"Crew members <b>___</b> speak a second language, but it's a big advantage.",
+      opts:["don't have to","mustn't","can't","shouldn't"], correct:0,
+      why:"Ausência de obrigação (não é exigido, mas é bem-vindo) é expressa por <b>don't have to</b>." },
+    { level:"B1", tag:"Verbo modal", stem:"If I were you, I <b>___</b> arrive at the airport at least two hours early.",
+      opts:["would","will","must","can"], correct:0,
+      why:"Conselho hipotético com \"If I were you\" pede <b>would</b> na oração principal, típico do segundo condicional." },
+    { level:"A2", tag:"Presente perfeito", stem:"I <b>___</b> (work) as a flight attendant since 2019.",
+      opts:["have worked","worked","was working","work"], correct:0,
+      why:"\"Since 2019\" marca uma ação iniciada no passado e que continua — usa-se o <b>present perfect</b>: \"have worked\"." },
+    { level:"B1", tag:"Passado simples e contínuo", stem:"The plane <b>___</b> (take off) while I <b>___</b> (read) the safety card.",
+      opts:["took off / was reading","was taking off / read","took off / read","was taking off / was reading"], correct:0,
+      why:"Ação pontual que interrompe outra em andamento: passado simples (<b>took off</b>) + passado contínuo (<b>was reading</b>)." },
+    { level:"A2", tag:"Futuro (will x going to)", stem:"Look at those dark clouds! I think the flight <b>___</b> be delayed.",
+      opts:["is going to","will","would","is"], correct:0,
+      why:"Previsão baseada em evidência visível no presente usa <b>going to</b>, não \"will\" (mais comum para decisões espontâneas)." },
+    { level:"B2", tag:"Passado perfeito", stem:"By the time we reached the gate, the flight <b>___</b> (already / leave).",
+      opts:["had already left","already left","has already left","was already leaving"], correct:0,
+      why:"Ação concluída antes de outro momento no passado (\"by the time we reached\") usa <b>past perfect</b>: \"had already left\"." },
+    { level:"A2", tag:"Presente contínuo (futuro)", stem:"I <b>___</b> (fly) to Rome next Friday — it's already on the schedule.",
+      opts:["am flying","fly","will fly","flew"], correct:0,
+      why:"Plano já confirmado e agendado para o futuro próximo usa <b>presente contínuo</b>: \"am flying\"." },
+    { level:"A2", tag:"Phrasal verb", stem:"Please <b>___</b> your seatbelt before the plane starts moving.",
+      opts:["put on","take off","turn on","look up"], correct:0,
+      why:"\"Put on\" significa colocar/vestir algo — nesse caso, o cinto de segurança." },
+    { level:"B1", tag:"Phrasal verb", stem:"The flight was <b>___</b> due to a technical problem.",
+      opts:["called off","called up","called out","called in"], correct:0,
+      why:"\"Call off\" significa cancelar. As demais combinações têm sentidos diferentes (convocar, gritar, etc.)." },
+    { level:"A2", tag:"Phrasal verb", stem:"Could you <b>___</b> the volume? I can barely hear the announcement.",
+      opts:["turn up","turn off","turn down","turn out"], correct:0,
+      why:"\"Turn up\" significa aumentar (som, volume). \"Turn down\" seria diminuir — o oposto do pedido." },
+    { level:"B2", tag:"Phrasal verb", stem:"New flight attendants have to <b>___</b> a lot of information during training.",
+      opts:["take in","take off","take out","take up"], correct:0,
+      why:"\"Take in\" significa absorver/assimilar informação." },
+    { level:"A2", tag:"Question tag", stem:"This isn't your first flight as crew, <b>___</b>?",
+      opts:["is it","isn't it","was it","are you"], correct:0,
+      why:"Frase-base negativa (\"isn't\") pede question tag afirmativa: <b>is it</b>." },
+    { level:"B2", tag:"Question tag", stem:"The passengers must fasten their seatbelts now, <b>___</b>?",
+      opts:["mustn't they","must they","don't they","aren't they"], correct:0,
+      why:"Modal afirmativo \"must\" pede question tag negativa com o mesmo modal: <b>mustn't they</b>." },
+    { level:"B1", tag:"Question tag", stem:"You haven't flown this route before, <b>___</b>?",
+      opts:["have you","haven't you","did you","don't you"], correct:0,
+      why:"Frase-base negativa (\"haven't flown\") pede question tag afirmativa com o mesmo auxiliar: <b>have you</b>." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"reassure\" in: \"The flight attendant tried to reassure the nervous passenger.\"",
+      opts:["comfort","frighten","ignore","confuse"], correct:0,
+      why:"\"Reassure\" significa tranquilizar, dar confiança — sinônimo mais próximo é <b>comfort</b>." },
+    { level:"A2", tag:"Vocabulário · antônimo", stem:"Choose the word that means the opposite of \"departure\" in: \"Please check the departure time on your ticket.\"",
+      opts:["arrival","boarding","delay","gate"], correct:0,
+      why:"\"Departure\" (partida) é o oposto de <b>arrival</b> (chegada)." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"turbulence\" in: \"We experienced some turbulence during the flight.\"",
+      opts:["shaking","silence","delay","comfort"], correct:0,
+      why:"\"Turbulence\" é a instabilidade do voo — sinônimo mais próximo aqui é <b>shaking</b>." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"prompt\" in: \"Crew members must give a prompt response in emergencies.\"",
+      opts:["quick","slow","careful","quiet"], correct:0,
+      why:"\"Prompt\" significa rápido, imediato — sinônimo mais próximo é <b>quick</b>." },
+    { level:"C1", tag:"Expressão idiomática", stem:"\"After the rough landing, everyone was relieved it went off without a hitch.\" The expression \"without a hitch\" means:",
+      opts:["without any problems","without any passengers","without warning","without delay"], correct:0,
+      why:"\"Without a hitch\" é um idiom para algo que aconteceu <b>sem nenhum problema</b>, tranquilamente." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"The new schedule caught the whole crew off guard.\" The expression \"caught off guard\" means:",
+      opts:["surprised, unprepared","informed in advance","pleased","annoyed"], correct:0,
+      why:"\"Caught off guard\" significa <b>pego de surpresa</b>, sem estar preparado para algo." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"Once the doors are closed, there's no turning back.\" The expression \"no turning back\" means:",
+      opts:["no way to change the decision now","no need to hurry","no more delays expected","no other option available later"], correct:0,
+      why:"\"No turning back\" significa que <b>não há como voltar atrás</b> na decisão ou ação." },
+    { level:"B2", tag:"Expressão idiomática", stem:"\"She always goes the extra mile to make passengers feel comfortable.\" The expression \"goes the extra mile\" means:",
+      opts:["makes extra effort","travels long distances","works overtime","arrives early"], correct:0,
+      why:"\"Go the extra mile\" significa <b>fazer um esforço extra</b>, além do esperado." },
+    { level:"B1", tag:"Condicional (tipo 1)", stem:"If the weather <b>___</b> bad tomorrow, the flight will probably be delayed.",
+      opts:["is","was","were","will be"], correct:0,
+      why:"Primeiro condicional (situação real/possível no futuro): <b>if + presente simples</b>, \"will\" na oração principal." },
+    { level:"B2", tag:"Condicional (tipo 2)", stem:"If I <b>___</b> more free time, I would travel to a new country every month.",
+      opts:["had","have","would have","has"], correct:0,
+      why:"Segundo condicional (situação hipotética, pouco provável): <b>if + passado simples</b> (\"had\"), \"would\" na oração principal." },
+    { level:"C1", tag:"Condicional (tipo 3)", stem:"If she <b>___</b> the announcement more clearly, the passengers wouldn't have missed the gate change.",
+      opts:["had made","made","has made","would make"], correct:0,
+      why:"Terceiro condicional (situação hipotética no passado, já sem solução): <b>if + past perfect</b> (\"had made\"), \"would have + particípio\" na oração principal." },
+    { level:"A2", tag:"Verbo \"to be\"", stem:"My sister <b>___</b> a nurse. She works at the city hospital.",
+      opts:["is","are","am","be"], correct:0,
+      why:"Sujeito na 3ª pessoa do singular (\"My sister\") usa <b>is</b> do verbo \"to be\"." },
+    { level:"A2", tag:"Presente simples", stem:"He usually <b>___</b> breakfast before going to work.",
+      opts:["has","have","having","is having"], correct:0,
+      why:"3ª pessoa do singular no presente simples: verbo + <b>-s</b> (\"has\", de \"have\")." },
+    { level:"A2", tag:"There is / there are", stem:"<b>___</b> a lot of traffic on this street every morning.",
+      opts:["There is","There are","It is","There has"], correct:0,
+      why:"\"Traffic\" é substantivo incontável (singular): usa-se <b>there is</b>, não \"there are\"." },
+    { level:"A2", tag:"Some / any", stem:"I don't have <b>___</b> money with me right now.",
+      opts:["any","some","much of","a"], correct:0,
+      why:"Em frases negativas, usa-se <b>any</b> — \"some\" é mais comum em frases afirmativas." },
+    { level:"A2", tag:"Preposições de tempo", stem:"The meeting starts <b>___</b> 9 o'clock <b>___</b> Monday morning.",
+      opts:["at / on","in / at","on / in","at / in"], correct:0,
+      why:"Horários usam <b>at</b> (\"at 9 o'clock\") e dias usam <b>on</b> (\"on Monday\")." },
+    { level:"A2", tag:"Preposições de lugar", stem:"The keys are <b>___</b> the drawer, next to the notebook.",
+      opts:["in","on","at","under"], correct:0,
+      why:"Para algo dentro de um espaço fechado (como uma gaveta), usa-se <b>in</b>." },
+    { level:"A2", tag:"Plural irregular", stem:"There were three <b>___</b> playing in the park with their dog.",
+      opts:["children","childs","childrens","child"], correct:0,
+      why:"O plural de \"child\" é irregular: <b>children</b>." },
+    { level:"A2", tag:"Artigos", stem:"She works as <b>___</b> engineer for a small company downtown.",
+      opts:["an","a","the","some"], correct:0,
+      why:"Antes de palavra iniciada por som de vogal (\"engineer\"), usa-se o artigo <b>an</b>." },
+    { level:"A2", tag:"Verbo modal (habilidade)", stem:"My little brother <b>___</b> swim, but he can't ride a bike yet.",
+      opts:["can","must","should","will"], correct:0,
+      why:"Habilidade/capacidade no presente é expressa pelo modal <b>can</b>." },
+    { level:"A2", tag:"Passado simples (irregular)", stem:"We <b>___</b> to the beach last weekend and had a great time.",
+      opts:["went","goed","gone","go"], correct:0,
+      why:"\"Go\" é verbo irregular: passado simples é <b>went</b>, não \"goed\"." },
+    { level:"A2", tag:"Pronomes possessivos", stem:"Is this pen yours or is it <b>___</b>?",
+      opts:["hers","her","she","hers's"], correct:0,
+      why:"Pronome possessivo (substitui \"her pen\") é <b>hers</b>, sem substantivo depois." },
+    { level:"A2", tag:"Conectivos básicos", stem:"I wanted to go for a walk, <b>___</b> it started raining.",
+      opts:["but","and","because","so"], correct:0,
+      why:"<b>But</b> introduz uma ideia de contraste/oposição em relação à primeira parte da frase." },
+    { level:"A2", tag:"Advérbios de frequência", stem:"She <b>___</b> arrives late for class.",
+      opts:["never","not never","don't never","not"], correct:0,
+      why:"Advérbios de frequência como <b>never</b> vêm entre o sujeito e o verbo principal, sem \"not\"." },
+    { level:"A2", tag:"Comparativo simples", stem:"This backpack is <b>___</b> than the one I had before.",
+      opts:["lighter","more light","most light","light"], correct:0,
+      why:"\"Light\" é adjetivo curto: comparativo com <b>-er</b> → \"lighter\"." },
+    { level:"A2", tag:"Quantificadores", stem:"How <b>___</b> water do you drink every day?",
+      opts:["much","many","a lot","any"], correct:0,
+      why:"\"Water\" é substantivo incontável: usa-se <b>how much</b>, não \"how many\"." },
+    { level:"A2", tag:"Futuro (going to)", stem:"Look at those clouds! It <b>___</b> to rain soon.",
+      opts:["is going","will going","is go","going"], correct:0,
+      why:"\"Going to\" + infinitivo indica previsão baseada em algo visível agora: <b>is going to</b>." },
+    { level:"A2", tag:"Phrasal verb básico", stem:"Could you <b>___</b> the lights before you leave the room?",
+      opts:["turn off","turn in","turn down","turn over"], correct:0,
+      why:"\"Turn off\" significa desligar (uma luz, um aparelho)." },
+    { level:"A2", tag:"Phrasal verb básico", stem:"I usually <b>___</b> at 6 a.m. and go for a run.",
+      opts:["wake up","wake in","wake out","wake for"], correct:0,
+      why:"\"Wake up\" significa acordar." },
+    { level:"A2", tag:"Vocabulário · antônimo", stem:"Choose the word that means the opposite of \"expensive\" in: \"This restaurant is too expensive for us.\"",
+      opts:["cheap","large","modern","popular"], correct:0,
+      why:"\"Expensive\" (caro) é o oposto de <b>cheap</b> (barato)." },
+    { level:"A2", tag:"Vocabulário · cotidiano", stem:"Choose the best word to complete: \"Can you help me ___ the table before dinner?\"",
+      opts:["set","make","do","put"], correct:0,
+      why:"A collocation correta é <b>set the table</b> (pôr a mesa)." },
+    { level:"B1", tag:"Presente perfeito x passado", stem:"I <b>___</b> that movie twice already, but I'd watch it again.",
+      opts:["have watched","watched","was watching","watch"], correct:0,
+      why:"Experiência sem tempo específico mencionado usa <b>present perfect</b>: \"have watched\"." },
+    { level:"B1", tag:"Voz passiva", stem:"Choose the passive form of: \"Someone left this umbrella on the bus yesterday.\"",
+      opts:["This umbrella was left on the bus yesterday.","This umbrella has left on the bus yesterday.","This umbrella left on the bus yesterday.","This umbrella was leaving on the bus yesterday."], correct:0,
+      why:"Voz passiva no passado simples: <b>was + particípio</b> (\"was left\")." },
+    { level:"B1", tag:"Conectivo", stem:"<b>___</b> it was raining heavily, they decided to go for a walk anyway.",
+      opts:["Although","Because","So","Due to"], correct:0,
+      why:"Antes de uma oração completa (\"it was raining heavily\"), usa-se <b>Although</b>." },
+    { level:"B1", tag:"Phrasal verb", stem:"I need to <b>___</b> this form before the end of the day.",
+      opts:["fill out","fill up","fill in with","fill on"], correct:0,
+      why:"\"Fill out\" (ou \"fill in\") significa preencher um formulário; \"fill out\" é a forma mais comum em inglês americano." },
+    { level:"B1", tag:"Comparativo / superlativo", stem:"This is <b>___</b> book I've read all year.",
+      opts:["the most interesting","the interestingest","more interesting","most interestinger"], correct:0,
+      why:"\"Interesting\" é adjetivo longo: superlativo com <b>the most</b>." },
+    { level:"B2", tag:"Verbo modal", stem:"You <b>___</b> have told me you were coming — I would have cooked more food!",
       opts:["should","must","can","need"], correct:0,
-      why:"Crítica ou arrependimento sobre uma ação passada usa <b>should have</b> + particípio." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Passado simples x contínuo", stem:"The plane <b>___</b> (start) taxiing while passengers <b>___</b> (still / fasten) their seatbelts.",
-      opts:["started / were still fastening","was starting / still fastened","started / still fastened","was starting / were still fastening"], correct:0,
-      why:"Ação pontual (<b>started</b>) acontece durante outra ação em andamento (<b>were still fastening</b>)." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Gerúndio x infinitivo", stem:"She avoids <b>___</b> (argue) with difficult passengers.",
-      opts:["arguing","to argue","argue","argued"], correct:0,
-      why:"O verbo \"avoid\" é sempre seguido de <b>gerúndio</b>: \"avoids arguing\"." },
-
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Presente perfeito contínuo (pergunta)", stem:"How long <b>___</b> you been working for this airline?",
-      opts:["have","are","did","do"], correct:0,
-      why:"Pergunta sobre duração de uma ação contínua até agora usa <b>present perfect continuous</b>: \"have you been working\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Passado perfeito (negativo)", stem:"He <b>___</b> (not / complete) the course before he was transferred.",
-      opts:["hadn't completed","didn't complete","hasn't completed","wasn't completing"], correct:0,
-      why:"Negativa do past perfect: <b>hadn't</b> + particípio, para uma ação não concluída antes de outro ponto no passado." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Futuro (be about to)", stem:"Fasten your seatbelt — we <b>___</b> take off.",
-      opts:["are about to","are going","will about to","are about"], correct:0,
-      why:"<b>Be about to</b> + verbo indica uma ação prestes a acontecer, no futuro imediato." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Condicional (tipo zero)", stem:"If the cabin pressure <b>___</b>, the oxygen masks drop automatically.",
-      opts:["drops","will drop","dropped","would drop"], correct:0,
-      why:"Condicional zero (fato geral/automático): <b>if + presente simples</b> nas duas orações." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Condicional (tipo 1, negativo)", stem:"If you <b>___</b> (not / check in) online, you'll have to wait in line.",
-      opts:["don't check in","won't check in","didn't check in","aren't checking in"], correct:0,
-      why:"Primeiro condicional negativo: <b>if + don't/doesn't</b> + verbo na forma base." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva (com modal)", stem:"Choose the passive form of: \"They must check every passport carefully.\"",
-      opts:["Every passport must be checked carefully.","Every passport must checked carefully.","Every passport must be check carefully.","Every passport is must be checked carefully."], correct:0,
-      why:"Voz passiva com modal: <b>modal + be + particípio</b> — \"must be checked\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva (futuro perfeito)", stem:"Choose the passive form of: \"They will have finished the inspection by noon.\"",
-      opts:["The inspection will have been finished by noon.","The inspection will have finished by noon.","The inspection will be finished by noon.","The inspection has been finished by noon."], correct:0,
-      why:"Futuro perfeito na voz passiva: <b>will have been + particípio</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Discurso indireto (imperativo)", stem:"The instructor said: \"Check the emergency exits first.\" In reported speech:",
-      opts:["The instructor told us to check the emergency exits first.","The instructor said to checking the emergency exits first.","The instructor told us check the emergency exits first.","The instructor said us to check the emergency exits first."], correct:0,
-      why:"Imperativo relatado vira <b>infinitivo</b>: \"told us to check\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Discurso indireto (modal can)", stem:"She said: \"I can help you with the luggage.\" In reported speech:",
-      opts:["She said she could help me with the luggage.","She said she can help me with the luggage.","She said she could helped me with the luggage.","She said she would could help me with the luggage."], correct:0,
-      why:"Backshift: o modal \"can\" recua para <b>could</b> quando relatado com verbo de elocução no passado." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Verbo modal (needn't have)", stem:"You <b>___</b> worried — the flight wasn't even delayed.",
-      opts:["needn't have","didn't need","mustn't have","shouldn't"], correct:0,
-      why:"<b>Needn't have</b> + particípio indica uma ação desnecessária que acabou sendo feita mesmo assim." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Passado perfeito contínuo (pergunta)", stem:"How long <b>___</b> they been waiting when the gate finally opened?",
-      opts:["had","have","were","did"], correct:0,
-      why:"Pergunta sobre duração de uma ação até um ponto no passado usa <b>past perfect continuous</b>: \"had they been waiting\"." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Presente perfeito (just)", stem:"The plane <b>___</b> (just / land), so passengers can't disembark yet.",
-      opts:["has just landed","just landed","is just landing","had just landed"], correct:0,
-      why:"\"Just\" com ação recém-concluída e relevante para o presente usa <b>present perfect</b>." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Conectivo (unless)", stem:"You won't be allowed to board <b>___</b> you show a valid boarding pass.",
-      opts:["unless","if","when","until"], correct:0,
-      why:"<b>Unless</b> equivale a \"if...not\" (\"a menos que\"), encaixando-se melhor no sentido da frase do que as outras opções." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Used to (hábito passado)", stem:"She <b>___</b> (use to / be) nervous about flying, but not anymore.",
-      opts:["used to be","use to be","was used to be","is used to be"], correct:0,
-      why:"<b>Used to</b> + verbo na forma base descreve um hábito ou estado do passado que não existe mais." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva informal (get)", stem:"The luggage <b>___</b> (get / lose) during the connection.",
-      opts:["got lost","was got lost","got losing","was getting lost"], correct:0,
-      why:"\"Get\" + particípio é uma forma informal de voz passiva: <b>got lost</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Causativo (have something done)", stem:"She <b>___</b> (have / her passport / renew) before the trip.",
-      opts:["had her passport renewed","had renewed her passport","was renewed her passport","had her passport renew"], correct:0,
-      why:"Estrutura causativa: <b>have + objeto + particípio</b> — \"had her passport renewed\" (mandou renovar)." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Condicional (tipo 2, pergunta)", stem:"What <b>___</b> you do if your flight got cancelled?",
-      opts:["would","will","did","do"], correct:0,
-      why:"Pergunta no segundo condicional usa <b>would</b> na oração principal." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Presente perfeito x passado simples", stem:"She <b>___</b> (visit) five countries last year, and she <b>___</b> (visit) three more since January.",
-      opts:["visited / has visited","has visited / visited","visited / visited","has visited / has visited"], correct:0,
-      why:"Tempo específico e concluído (\"last year\") usa <b>passado simples</b>; período que continua até agora (\"since January\") usa <b>present perfect</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva (imperativo/modal)", stem:"Choose the passive equivalent of the instruction: \"Store your bag under the seat.\"",
-      opts:["Your bag should be stored under the seat.","Your bag should stored under the seat.","Your bag should be store under the seat.","Your bag should being stored under the seat."], correct:0,
-      why:"Instrução relatada como recomendação passiva: <b>should be + particípio</b>." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Gerúndio após preposição", stem:"She's responsible for <b>___</b> (train) the new recruits.",
-      opts:["training","to train","train","trained"], correct:0,
-      why:"Depois de preposição (\"for\"), o verbo vai para o <b>gerúndio</b>: \"for training\"." },
-    { diff:"medium", level:"B1", cat:"tempo", tag:"Infinitivo de propósito", stem:"The crew arrived early <b>___</b> (prepare) the cabin.",
-      opts:["to prepare","for prepare","preparing","for preparing"], correct:0,
-      why:"Para expressar propósito/finalidade, usa-se o <b>infinitivo com \"to\"</b>: \"to prepare\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Verbo modal (would rather)", stem:"I'd rather <b>___</b> (fly) in the morning than at night.",
-      opts:["fly","to fly","flying","flew"], correct:0,
-      why:"\"Would rather\" é seguido do verbo na <b>forma base</b>, sem \"to\"." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Passado perfeito (oração temporal)", stem:"After she <b>___</b> (finish) the briefing, she headed to the gate.",
-      opts:["had finished","finished","has finished","was finishing"], correct:0,
-      why:"Ação concluída antes de outra no passado, introduzida por \"after\", usa <b>past perfect</b>." },
-    { diff:"medium", level:"B2", cat:"tempo", tag:"Voz passiva (passado, 2)", stem:"Choose the passive form of: \"They postponed the meeting until Friday.\"",
-      opts:["The meeting was postponed until Friday.","The meeting has postponed until Friday.","The meeting postponed until Friday.","The meeting was postponing until Friday."], correct:0,
-      why:"Passado simples na voz passiva: <b>was + particípio</b> (\"was postponed\")." },
-
-    /* ================= MEDIUM (B1-B2) — 4 preposição ================= */
-    { diff:"medium", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"The new uniform policy applies <b>___</b> all crew members starting Monday.",
-      opts:["to","for","with","in"], correct:0,
-      why:"\"Apply\" combina com a preposição <b>to</b>: \"apply to someone/something\"." },
-    { diff:"medium", level:"B2", cat:"prep", tag:"Preposição (causa)", stem:"The delay was <b>___</b> a mechanical issue, not the weather.",
-      opts:["due to","because","despite of","owing"], correct:0,
-      why:"<b>Due to</b> + substantivo indica causa (\"devido a um problema mecânico\")." },
-    { diff:"medium", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"She's been complaining <b>___</b> the new schedule since last week.",
-      opts:["about","of","for","at"], correct:0,
-      why:"\"Complain\" combina com a preposição <b>about</b>: \"complain about something\"." },
-    { diff:"medium", level:"B2", cat:"prep", tag:"Preposição dependente", stem:"The crew succeeded <b>___</b> calming the nervous passenger down.",
-      opts:["in","at","with","for"], correct:0,
-      why:"\"Succeed\" combina com <b>in</b> + gerúndio: \"succeed in doing something\"." },
-
-    { diff:"medium", level:"B2", cat:"prep", tag:"Preposição dependente", stem:"The new employee is not yet familiar <b>___</b> the emergency procedures.",
-      opts:["with","to","for","of"], correct:0,
-      why:"\"Familiar\" combina com a preposição <b>with</b>: \"familiar with something\"." },
-    { diff:"medium", level:"B2", cat:"prep", tag:"Preposição dependente", stem:"The supervisor insisted <b>___</b> a full inspection before departure.",
-      opts:["on","for","in","at"], correct:0,
-      why:"\"Insist\" combina com a preposição <b>on</b>: \"insist on something\"." },
-    { diff:"medium", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"The airline is known <b>___</b> its excellent customer service.",
-      opts:["for","by","with","as"], correct:0,
-      why:"\"Known\" combina com a preposição <b>for</b> quando se refere a uma qualidade ou característica." },
-    { diff:"medium", level:"B2", cat:"prep", tag:"Preposição (used to)", stem:"She's not used <b>___</b> waking up so early for shifts.",
-      opts:["to","for","with","at"], correct:0,
-      why:"\"Used to\" (estar acostumado) é seguido de <b>to</b> + gerúndio, diferente de \"used to\" de hábito passado." },
-    { diff:"medium", level:"B2", cat:"prep", tag:"Preposição dependente", stem:"The delay resulted <b>___</b> several missed connections.",
-      opts:["in","from","with","at"], correct:0,
-      why:"\"Result\" combina com a preposição <b>in</b> quando indica a consequência: \"result in something\"." },
-    { diff:"medium", level:"B1", cat:"prep", tag:"Preposição dependente", stem:"He congratulated her <b>___</b> passing the final exam.",
-      opts:["on","for","about","with"], correct:0,
-      why:"\"Congratulate\" combina com a preposição <b>on</b>: \"congratulate someone on something\"." },
-
-    /* ================= MEDIUM (B1-B2) — 4 vocabulário/sinônimo ================= */
-    { diff:"medium", level:"B2", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"exhausted\" in: \"After the long-haul flight, the crew felt exhausted.\"",
-      opts:["extremely tired","very happy","quite nervous","somewhat confused"], correct:0,
-      why:"\"Exhausted\" significa extremamente cansado — sinônimo mais próximo é <b>extremely tired</b>." },
-    { diff:"medium", level:"B2", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"postpone\" in: \"They decided to postpone the meeting until next week.\"",
-      opts:["delay","cancel","start","finish"], correct:0,
-      why:"\"Postpone\" significa adiar — sinônimo mais próximo é <b>delay</b>." },
-    { diff:"medium", level:"B1", cat:"voc", tag:"Expressão idiomática", stem:"\"She called in sick because she was feeling under the weather.\" The expression \"under the weather\" means:",
-      opts:["slightly ill","very happy","extremely busy","well rested"], correct:0,
-      why:"\"Under the weather\" é um idiom para <b>estar um pouco doente/indisposto</b>." },
-    { diff:"medium", level:"B2", cat:"voc", tag:"Vocabulário · antônimo", stem:"Choose the opposite of \"punctual\" in: \"It's important to be punctual for the briefing.\"",
-      opts:["late","quick","careful","formal"], correct:0,
-      why:"\"Punctual\" (pontual) é o oposto de <b>late</b> (atrasado)." },
-
-    { diff:"medium", level:"B2", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"reliable\" in: \"He's known for being a reliable colleague.\"",
-      opts:["dependable","careless","dishonest","forgetful"], correct:0,
-      why:"\"Reliable\" (confiável) tem como sinônimo mais próximo <b>dependable</b>." },
-    { diff:"medium", level:"B2", cat:"voc", tag:"Vocabulário · antônimo", stem:"Choose the opposite of \"increase\" in: \"Fuel costs tend to increase during peak season.\"",
-      opts:["decrease","rise","remain","double"], correct:0,
-      why:"\"Increase\" (aumentar) é o oposto de <b>decrease</b> (diminuir)." },
-    { diff:"medium", level:"B1", cat:"voc", tag:"Expressão idiomática", stem:"\"The flight attendant told a joke to break the ice with nervous passengers.\" The expression \"break the ice\" means:",
-      opts:["ease tension in a new situation","cause an argument","end the conversation","request silence"], correct:0,
-      why:"\"Break the ice\" significa <b>aliviar a tensão</b> no início de uma interação." },
-    { diff:"medium", level:"B1", cat:"voc", tag:"Vocabulário · cotidiano", stem:"Choose the best word to complete: \"She always makes an effort to remember passengers' names.\"",
-      opts:["make","do","take","have"], correct:0,
-      why:"A collocation correta é <b>make an effort</b> (fazer um esforço)." },
-    { diff:"medium", level:"B2", cat:"voc", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"crucial\" in: \"Following the checklist is crucial for safety.\"",
-      opts:["essential","optional","minor","unclear"], correct:0,
-      why:"\"Crucial\" (crucial) tem como sinônimo mais próximo <b>essential</b>." },
-    { diff:"medium", level:"B2", cat:"voc", tag:"Expressão idiomática", stem:"\"Training new staff takes time, but it pays off in the long run.\" The expression \"in the long run\" means:",
-      opts:["eventually","immediately","rarely","secretly"], correct:0,
-      why:"\"In the long run\" significa <b>a longo prazo, eventualmente</b>." },
-
-    /* ================= HARD (C1+) — 16 tempos verbais ================= */
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Condicional (tipo 3)", stem:"If the pilot <b>___</b> (notice) the warning light earlier, the delay could have been avoided.",
-      opts:["had noticed","noticed","has noticed","would notice"], correct:0,
-      why:"Terceiro condicional (situação hipotética no passado): <b>if + past perfect</b> (\"had noticed\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Condicional misto", stem:"If she <b>___</b> (train) harder years ago, she would be a senior instructor now.",
-      opts:["had trained","trained","has trained","would train"], correct:0,
-      why:"Condicional misto (causa no passado, consequência no presente): <b>if + past perfect</b> + \"would\" no presente." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão condicional", stem:"<b>___</b> the crew known about the storm, they would have rerouted the flight.",
-      opts:["Had","If","Should","Were"], correct:0,
-      why:"Inversão no terceiro condicional: <b>Had</b> + sujeito + particípio substitui \"If the crew had known\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Subjuntivo", stem:"The supervisor insisted that every checklist <b>___</b> completed twice.",
-      opts:["be","is","was","will be"], correct:0,
-      why:"Depois de verbos como \"insist\", usa-se o <b>subjuntivo</b>: forma base do verbo (\"be\"), sem flexão." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Voz passiva (verbos de opinião)", stem:"Choose the passive form of: \"People believe that the new policy will reduce delays.\"",
-      opts:["The new policy is believed to reduce delays.","The new policy is believed that will reduce delays.","The new policy believed to reduce delays.","The new policy is believing to reduce delays."], correct:0,
-      why:"Estrutura formal com verbos de opinião: <b>be believed + infinitivo</b> — \"is believed to reduce\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Passado perfeito", stem:"She <b>___</b> (already / land) when the storm hit the region.",
-      opts:["had already landed","had already been landing","has already landed","already landed"], correct:0,
-      why:"Ação concluída antes de outro momento no passado usa <b>past perfect</b>: \"had already landed\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Futuro perfeito contínuo", stem:"By the time she retires, she <b>___</b> (fly) for over thirty years.",
-      opts:["will have been flying","will have flown","will be flying","has been flying"], correct:0,
-      why:"Duração de uma ação até um ponto no futuro usa <b>future perfect continuous</b>: \"will have been flying\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Discurso indireto avançado", stem:"He said: \"I would have helped if I had known.\" In reported speech:",
-      opts:["He said that he would have helped if he had known.","He said that he will have helped if he knew.","He said that he would help if he knew.","He said that he had helped if he had known."], correct:0,
-      why:"O terceiro condicional já está no \"passado hipotético\" e não sofre backshift adicional — mantém-se como \"would have helped if he had known\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Gerúndio x infinitivo (avançado)", stem:"She regrets <b>___</b> (not / report) the incident sooner.",
-      opts:["not reporting","to not report","not to report","don't report"], correct:0,
-      why:"\"Regret\" + gerúndio no negativo usa <b>not + gerúndio</b>: \"regrets not reporting\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Elipse", stem:"He hasn't finished the report yet, and neither <b>___</b> his colleague.",
-      opts:["has","does","is","had"], correct:0,
-      why:"Para evitar repetição, usa-se o mesmo auxiliar da primeira oração: como era \"hasn't\", repete-se <b>has</b> (\"neither has his colleague\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Oração reduzida (particípio)", stem:"<b>___</b> unable to reach the gate on time, she asked a colleague to cover her shift.",
-      opts:["Being","Been","To be","Be"], correct:0,
-      why:"Oração reduzida de particípio presente indicando causa: <b>Being</b> unable = \"Because she was unable\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Frase clivada", stem:"Choose the cleft sentence equivalent to: \"The captain finally made the decision, not the co-pilot.\"",
-      opts:["It was the captain, not the co-pilot, who finally made the decision.","It was the captain what finally made the decision.","That was the captain who made the decision finally.","It is the captain who finally made the decision."], correct:0,
-      why:"Frase clivada com <b>It was... who...</b> dá ênfase ao elemento destacado (\"the captain\"), mantendo o mesmo tempo verbal da frase original." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Verbo modal (dedução no passado)", stem:"The runway lights were already off — the last flight <b>___</b> already departed.",
-      opts:["must have","must","should have","might"], correct:0,
-      why:"Dedução lógica sobre o passado: <b>must have</b> + particípio (\"must have departed\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Voz passiva (relatos)", stem:"Choose the passive form of: \"They say that the delay caused major losses.\"",
-      opts:["The delay is said to have caused major losses.","The delay is said that caused major losses.","The delay said to have caused major losses.","The delay is saying to have caused major losses."], correct:0,
-      why:"Estrutura formal de relato: <b>be said to have + particípio</b> para se referir a algo que aconteceu antes." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Condicional implícito", stem:"<b>___</b> for the quick thinking of the crew, the situation could have become far more serious.",
-      opts:["If it hadn't been","Unless it was","Even though it was","Despite it was"], correct:0,
-      why:"<b>If it hadn't been for</b> equivale a \"se não fosse por\", introduzindo uma condição implícita no passado." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão enfática", stem:"<b>___</b> had the doors closed than the captain announced the delay.",
+      why:"Crítica/arrependimento sobre o passado: <b>should have</b> + particípio." },
+    { level:"B2", tag:"Discurso indireto", stem:"He said: \"I'll call you as soon as I arrive.\" In reported speech:",
+      opts:["He said he would call me as soon as he arrived.","He said he will call me as soon as he arrives.","He said he calls me as soon as he arrives.","He said he would call me as soon as he arrive."], correct:0,
+      why:"Backshift: \"will\" → <b>would</b>, e \"arrive\" (presente) → <b>arrived</b> (passado), mantendo a lógica temporal da frase relatada." },
+    { level:"B1", tag:"Pronome relativo", stem:"The book <b>___</b> I borrowed from the library is due next week.",
+      opts:["that","who","whose","where"], correct:0,
+      why:"Para coisas (\"the book\"), usa-se <b>that</b> (ou \"which\")." },
+    { level:"B2", tag:"Vocabulário · sinônimo", stem:"Choose the word closest in meaning to \"diligent\" in: \"He is a diligent student who never misses an assignment.\"",
+      opts:["hardworking","lazy","forgetful","careless"], correct:0,
+      why:"\"Diligent\" significa dedicado, esforçado — sinônimo mais próximo é <b>hardworking</b>." },
+    { level:"B2", tag:"Condicional (tipo 2)", stem:"If I <b>___</b> you, I wouldn't spend all my savings on a new phone.",
+      opts:["were","was","am","would be"], correct:0,
+      why:"No segundo condicional, o verbo \"to be\" costuma usar <b>were</b> para todas as pessoas em registro mais cuidado (\"If I were you\")." },
+    { level:"C1", tag:"Inversão enfática", stem:"<b>___</b> had she sat down than the phone rang again.",
       opts:["No sooner","Hardly ever","Not until","Only if"], correct:0,
       why:"\"No sooner... than\" é uma estrutura de inversão enfática usada para indicar que uma ação aconteceu logo após outra." },
-
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão enfática (Not only)", stem:"<b>___</b> did the flight get delayed, but the luggage was also lost.",
-      opts:["Not only","No sooner","Hardly","Only when"], correct:0,
-      why:"\"Not only... but also...\" com inversão do auxiliar dá ênfase, ligando dois fatos negativos em sequência." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão enfática (Rarely)", stem:"<b>___</b> have I seen such a well-coordinated crew.",
-      opts:["Rarely","Usually","Often","Sometimes"], correct:0,
-      why:"Advérbios de frequência negativa como <b>Rarely</b> no início da frase provocam inversão (sujeito e auxiliar trocam de posição)." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão (Not until)", stem:"<b>___</b> the storm passed did the airport reopen.",
-      opts:["Not until","Even though","As soon as","Because"], correct:0,
-      why:"\"Not until\" no início da frase provoca inversão com \"did\"; as demais opções não geram essa estrutura." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Subjuntivo (recommend)", stem:"The safety officer recommended that all crew <b>___</b> refresher training annually.",
-      opts:["take","takes","took","will take"], correct:0,
-      why:"Depois de \"recommend that\", usa-se o <b>subjuntivo</b>: forma base do verbo, sem flexão." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Subjuntivo (essential)", stem:"It's essential that every checklist <b>___</b> reviewed twice.",
+    { level:"C1", tag:"Inversão condicional", stem:"<b>___</b> I known about the traffic, I would have left home earlier.",
+      opts:["Had","If","Should","Were"], correct:0,
+      why:"Inversão no terceiro condicional: <b>Had</b> + sujeito + particípio substitui \"If I had known\"." },
+    { level:"C1", tag:"Condicional misto", stem:"If she <b>___</b> harder at university, she would have a much better job now.",
+      opts:["had studied","studied","has studied","would study"], correct:0,
+      why:"Condicional misto (causa no passado, consequência no presente): <b>if + past perfect</b> (\"had studied\") + \"would\" no presente na oração principal." },
+    { level:"C1", tag:"Voz passiva (verbos de opinião)", stem:"Choose the correct passive form of: \"People believe that the company will expand next year.\"",
+      opts:["The company is believed to expand next year.","The company is believed that will expand next year.","The company believed to expand next year.","The company is believing to expand next year."], correct:0,
+      why:"Estrutura formal com verbos de opinião (\"believe\"): <b>be believed + infinitivo</b> — \"is believed to expand\"." },
+    { level:"C1", tag:"Oração reduzida (particípio)", stem:"<b>___</b> tired after the long journey, she decided to go straight to bed.",
+      opts:["Feeling","Felt","To feel","Feel"], correct:0,
+      why:"Oração reduzida de particípio presente indicando causa/motivo: <b>Feeling</b> tired = \"Because she felt tired\"." },
+    { level:"C1", tag:"Frase clivada", stem:"Choose the cleft sentence equivalent to: \"She finally told me the truth after all these years.\"",
+      opts:["It was the truth that she finally told me after all these years.","It was the truth what she finally told me after all these years.","That was the truth she finally told me after all these years.","It is the truth that she finally told me after all these years."], correct:0,
+      why:"Frase clivada com <b>It was... that...</b> dá ênfase ao elemento destacado (\"the truth\"), mantendo o mesmo tempo verbal da frase original." },
+    { level:"C1", tag:"Conectivo formal", stem:"The proposal was rejected by the board; <b>___</b>, the team decided to revise it and try again.",
+      opts:["nevertheless","despite","because of","provided that"], correct:0,
+      why:"<b>Nevertheless</b> (\"mesmo assim\") conecta duas orações independentes, indicando contraste — usado como advérbio entre frases, não como preposição." },
+    { level:"C1", tag:"Conectivo formal (condição)", stem:"You can borrow the car <b>___</b> you bring it back before six.",
+      opts:["provided that","despite","in spite of","although"], correct:0,
+      why:"<b>Provided that</b> introduz uma condição necessária (\"desde que\"), equivalente a \"if\" em registro mais formal." },
+    { level:"C1", tag:"Subjuntivo", stem:"The manager insisted that the report <b>___</b> submitted by Friday.",
       opts:["be","is","was","will be"], correct:0,
-      why:"Depois de \"it's essential that\", usa-se o <b>subjuntivo</b>: \"be\", sem flexão." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Voz passiva (verbo de opinião 2)", stem:"Choose the passive form of: \"People think that the new schedule will improve punctuality.\"",
-      opts:["The new schedule is thought to improve punctuality.","The new schedule is thought that will improve punctuality.","The new schedule thought to improve punctuality.","The new schedule is thinking to improve punctuality."], correct:0,
-      why:"Estrutura formal com verbos de opinião: <b>be thought + infinitivo</b> — \"is thought to improve\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Futuro perfeito (by the time)", stem:"By the time the inquiry concludes, the airline <b>___</b> (implement) new safety protocols.",
-      opts:["will have implemented","will implement","will be implementing","has implemented"], correct:0,
-      why:"Ação que estará concluída antes de outro evento futuro usa <b>future perfect</b>: \"will have implemented\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Passado perfeito (concessivo)", stem:"Even though she <b>___</b> (prepare) thoroughly, the interview still caught her off guard.",
-      opts:["had prepared","prepared","has prepared","was preparing"], correct:0,
-      why:"Ação concluída antes de outra no passado, mesmo em oração concessiva, usa <b>past perfect</b>." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Discurso indireto (modal must)", stem:"He said: \"You must submit the report by Friday.\" In reported speech:",
-      opts:["He said that I had to submit the report by Friday.","He said that I must submit the report by Friday.","He said that I must have submitted the report by Friday.","He said that I had submitted the report by Friday."], correct:0,
-      why:"Backshift: o modal \"must\" (obrigação) recua para <b>had to</b> no discurso relatado." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Gerúndio após preposição (avançado)", stem:"She's known for <b>___</b> (never / miss) a deadline.",
-      opts:["never missing","never miss","to never miss","never having miss"], correct:0,
-      why:"Depois de preposição, o verbo vai para o <b>gerúndio</b>; o advérbio \"never\" vem antes dele." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Infinitivo perfeito", stem:"He seems <b>___</b> (finish) the report already.",
-      opts:["to have finished","to finish","having finished","finish"], correct:0,
-      why:"O <b>infinitivo perfeito</b> (\"to have finished\") expressa uma ação anterior à do verbo principal (\"seems\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Causativo (avançado)", stem:"The airline <b>___</b> (have / its fleet / inspect) annually by an independent agency.",
-      opts:["has its fleet inspected","has inspected its fleet","has its fleet inspect","had its fleet inspecting"], correct:0,
-      why:"Estrutura causativa: <b>have + objeto + particípio</b> — \"has its fleet inspected\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Frase clivada (What)", stem:"Choose the cleft sentence equivalent to: \"The delay frustrated the passengers most.\"",
-      opts:["What frustrated the passengers most was the delay.","What was frustrated the passengers most was the delay.","It was what frustrated the passengers most the delay.","What the delay frustrated was the passengers most."], correct:0,
-      why:"Frase clivada com <b>What... was...</b> dá ênfase ao elemento causador (\"the delay\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão enfática (Little)", stem:"<b>___</b> did the crew know that the flight would be diverted.",
-      opts:["Little","Much","Never","Ever"], correct:0,
-      why:"\"Little did + sujeito + verbo\" é uma inversão enfática que indica surpresa diante de algo inesperado." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Verbo modal (dedução negativa no passado)", stem:"She <b>___</b> left already — her bag is still at the desk.",
-      opts:["can't have","mustn't have","shouldn't have","needn't have"], correct:0,
-      why:"Dedução negativa sobre o passado (\"certamente não\") usa <b>can't have</b> + particípio." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Voz passiva (causativo negativo)", stem:"Passengers are not <b>___</b> (allow / board) without a valid ID.",
-      opts:["allowed to board","allowed board","allowing to board","allow to board"], correct:0,
-      why:"\"Be allowed to\" + infinitivo é a estrutura passiva para permissão: \"allowed to board\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Subjuntivo (demand)", stem:"The union demanded that the schedule <b>___</b> revised immediately.",
-      opts:["be","is","was","will be"], correct:0,
-      why:"Depois de \"demand that\", usa-se o <b>subjuntivo</b>: forma base do verbo (\"be\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Discurso indireto (pergunta com modal)", stem:"She asked: \"Could you tell me where the lounge is?\" In reported speech:",
-      opts:["She asked if I could tell her where the lounge was.","She asked could I tell her where the lounge is.","She asked if I can tell her where the lounge was.","She asked that I could tell her where the lounge is."], correct:0,
-      why:"Perguntas relatadas usam \"if/whether\", ordem afirmativa e backshift: \"asked if I could... was\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Inversão (So + adjetivo)", stem:"<b>___</b> tired was the crew that they fell asleep during the briefing.",
-      opts:["So","Such","Very","Too"], correct:0,
-      why:"\"So + adjetivo + that\" no início da frase provoca inversão do sujeito e do verbo \"to be\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Voz passiva (modal perfeito)", stem:"Choose the passive form of: \"They should have completed the audit by now.\"",
-      opts:["The audit should have been completed by now.","The audit should be completed by now.","The audit should have completed by now.","The audit had been completed by now."], correct:0,
-      why:"Modal perfeito na voz passiva: <b>should have been + particípio</b>." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Passado perfeito contínuo (pergunta)", stem:"<b>___</b> she been working there long before the promotion?",
-      opts:["Had","Has","Did","Was"], correct:0,
-      why:"Pergunta sobre duração até um ponto no passado usa <b>past perfect continuous</b>: \"Had she been working\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Estrutura hipotética formal (were to)", stem:"<b>___</b> the airline to cancel the route, passengers would be notified in advance.",
-      opts:["Were","If","Should","Had"], correct:0,
-      why:"\"Were + sujeito + to + infinitivo\" é uma forma hipotética formal, equivalente a \"If the airline were to cancel...\"." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"Auxiliar enfático (did)", stem:"She <b>___</b> genuinely try to solve the passenger's problem, even though it wasn't her fault.",
-      opts:["did","was","has","is"], correct:0,
-      why:"O auxiliar <b>did</b> antes do verbo na forma base dá ênfase à afirmação (\"she did try\")." },
-    { diff:"hard", level:"C1", cat:"tempo", tag:"The moment + passado", stem:"The moment the announcement <b>___</b> (make), passengers rushed to the gate.",
-      opts:["was made","had been made","is made","has been made"], correct:0,
-      why:"\"The moment\" funciona como \"assim que\", ligando duas ações pontuais e sequenciais no <b>passado simples</b> (aqui, na voz passiva)." },
-
-    /* ================= HARD (C1+) — 4 preposição ================= */
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"The success of the mission was largely attributable <b>___</b> the crew's quick response.",
-      opts:["to","for","with","on"], correct:0,
-      why:"\"Attributable\" combina com a preposição <b>to</b>: \"attributable to something\"." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Expressão preposicionada", stem:"The board's decision was <b>___</b> odds with the recommendations of the safety committee.",
-      opts:["at","in","on","by"], correct:0,
-      why:"<b>At odds with</b> é uma expressão fixa que significa \"em desacordo com\"." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"She was reluctant to comply <b>___</b> the new dress code at first.",
-      opts:["with","to","for","of"], correct:0,
-      why:"\"Comply\" combina com a preposição <b>with</b>: \"comply with a rule\"." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"The airline's reputation hinges <b>___</b> its punctuality record.",
-      opts:["on","in","at","for"], correct:0,
-      why:"\"Hinge\" combina com a preposição <b>on</b>: \"hinge on something\" (depender de algo)." },
-
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"The report was heavily criticized <b>___</b> its lack of detail.",
-      opts:["for","of","about","with"], correct:0,
-      why:"\"Criticized\" combina com a preposição <b>for</b>: \"criticized for something\"." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"She has a natural aptitude <b>___</b> languages.",
-      opts:["for","in","with","of"], correct:0,
-      why:"\"Aptitude\" combina com a preposição <b>for</b>: \"aptitude for something\"." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Expressão preposicionada", stem:"The new policy is aimed <b>___</b> reducing delays.",
-      opts:["at","for","to","on"], correct:0,
-      why:"<b>Aimed at</b> é a expressão fixa para indicar o objetivo de algo." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"He was accused <b>___</b> breaching protocol during the emergency.",
-      opts:["of","for","with","about"], correct:0,
-      why:"\"Accused\" combina com a preposição <b>of</b>: \"accused of something\"." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Preposição dependente (avançada)", stem:"The board is deeply divided <b>___</b> the proposed changes.",
-      opts:["over","in","at","by"], correct:0,
-      why:"\"Divided\" combina com a preposição <b>over</b> quando indica desacordo sobre um assunto." },
-    { diff:"hard", level:"C1", cat:"prep", tag:"Expressão preposicionada (formal)", stem:"Her promotion was long overdue, <b>___</b> her years of dedication.",
-      opts:["in view of","in spite","because","despite of"], correct:0,
-      why:"<b>In view of</b> significa \"tendo em vista\", introduzindo uma razão; \"in spite\" e \"despite of\" não existem nessa forma." },
-
-    /* ================= HARD (C1+) — 4 vocabulário/sinônimo ================= */
-    { diff:"hard", level:"C1", cat:"voc", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"meticulous\" in: \"The inspector was meticulous about every safety detail.\"",
+      why:"Depois de verbos como \"insist\", \"suggest\" e \"recommend\", usa-se o <b>subjuntivo</b>: forma base do verbo (\"be\"), sem flexão." },
+    { level:"C1", tag:"Elipse", stem:"She can speak French fluently, and so <b>___</b> her brother.",
+      opts:["can","does","is","has"], correct:0,
+      why:"Para evitar repetição, usa-se o mesmo auxiliar da primeira oração: como o verbo era \"can\", repete-se <b>can</b> (\"so can her brother\")." },
+    { level:"C1", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"meticulous\" in: \"She is known for being meticulous about every detail of her work.\"",
       opts:["extremely careful","quite careless","very fast","somewhat lazy"], correct:0,
       why:"\"Meticulous\" significa extremamente cuidadoso e atento a detalhes." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Collocation avançada", stem:"The two airlines finally managed to <b>___</b> an agreement after months of talks.",
+    { level:"C1", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"ambiguous\" in: \"His answer was so ambiguous that nobody understood his real opinion.\"",
+      opts:["unclear","obvious","honest","confident"], correct:0,
+      why:"\"Ambiguous\" significa que pode ser interpretado de mais de uma forma — <b>unclear</b> é o sinônimo mais próximo aqui." },
+    { level:"C1", tag:"Collocation avançada", stem:"The two companies finally managed to <b>___</b> a compromise after weeks of negotiation.",
       opts:["reach","make","do","take"], correct:0,
-      why:"A collocation correta é <b>reach an agreement</b> (chegar a um acordo)." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Expressão idiomática avançada", stem:"\"His argument didn't hold water once the data was reviewed.\" The expression \"didn't hold water\" means:",
-      opts:["wasn't convincing","was totally accurate","was very long","was kept secret"], correct:0,
+      why:"A collocation correta é <b>reach a compromise</b> (chegar a um acordo)." },
+    { level:"C1", tag:"Phrasal verb avançado", stem:"The negotiations <b>___</b> after both sides refused to change their positions.",
+      opts:["broke down","broke up","broke in","broke off"], correct:0,
+      why:"\"Break down\" (no contexto de negociações) significa fracassar, chegar a um impasse." },
+    { level:"C1", tag:"Expressão idiomática avançada", stem:"\"His explanation didn't hold water once we checked the actual numbers.\" The expression \"didn't hold water\" means:",
+      opts:["wasn't logical or convincing","was completely accurate","was extremely long","was kept secret"], correct:0,
       why:"\"Not hold water\" é um idiom para um argumento que <b>não se sustenta</b>, não é convincente diante dos fatos." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"candid\" in: \"She gave a candid answer about the mistake.\"",
-      opts:["honest","vague","rude","quiet"], correct:0,
-      why:"\"Candid\" significa sincero, direto — sinônimo mais próximo é <b>honest</b>." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"pragmatic\" in: \"The manager took a pragmatic approach to the crisis.\"",
-      opts:["practical","emotional","idealistic","careless"], correct:0,
-      why:"\"Pragmatic\" significa prático, realista — sinônimo mais próximo é <b>practical</b>." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Vocabulário · antônimo (avançado)", stem:"Choose the opposite of \"concise\" in: \"His concise explanation saved everyone time.\"",
-      opts:["verbose","clear","brief","accurate"], correct:0,
-      why:"\"Concise\" (conciso) é o oposto de <b>verbose</b> (prolixo, verboso)." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Expressão idiomática avançada", stem:"\"The company was accused of cutting corners on safety training.\" The expression \"cut corners\" means:",
-      opts:["doing something poorly to save time or money","finishing early","working overtime","following every rule strictly"], correct:0,
-      why:"\"Cut corners\" significa <b>fazer algo de forma mal-feita</b> para economizar tempo ou dinheiro." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Collocation avançada", stem:"Choose the best word to complete: \"It's too early to ___ a conclusion from these numbers.\"",
-      opts:["draw","make","take","do"], correct:0,
-      why:"A collocation correta é <b>draw a conclusion</b> (chegar a uma conclusão)." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"unprecedented\" in: \"The airline faced unprecedented demand during the holidays.\"",
-      opts:["never seen before","very common","slightly unusual","well planned"], correct:0,
-      why:"\"Unprecedented\" significa sem precedentes — sinônimo mais próximo é <b>never seen before</b>." },
-    { diff:"hard", level:"C1", cat:"voc", tag:"Expressão idiomática avançada", stem:"\"If you read between the lines, the memo hints at upcoming layoffs.\" The expression \"read between the lines\" means:",
-      opts:["understand the hidden meaning","read very quickly","skip unimportant parts","memorize word for word"], correct:0,
-      why:"\"Read between the lines\" significa <b>entender o significado implícito</b> de algo." },
+    { level:"C1", tag:"Voz passiva (relatos)", stem:"Choose the correct passive form of: \"They say that the new policy has caused confusion.\"",
+      opts:["The new policy is said to have caused confusion.","The new policy is said that has caused confusion.","The new policy said to have caused confusion.","The new policy is saying to have caused confusion."], correct:0,
+      why:"Estrutura formal de relato: <b>be said to have + particípio</b> para se referir a algo que aconteceu antes." },
+    { level:"C1", tag:"Conectivo de contraste", stem:"<b>___</b> her lack of experience, she was offered the position immediately.",
+      opts:["Despite","Although","Even though","While"], correct:0,
+      why:"Antes de um substantivo (\"her lack of experience\"), usa-se <b>Despite</b>, não \"although/even though/while\" (que pedem oração completa)." },
+    { level:"C1", tag:"Verbo modal (dedução no passado)", stem:"The lights were off and the door was locked — they <b>___</b> already left.",
+      opts:["must have","must","should have","might"], correct:0,
+      why:"Dedução lógica sobre o passado: <b>must have</b> + particípio (\"must have left\")." },
+    { level:"C1", tag:"Gerúndio x infinitivo", stem:"She regrets <b>___</b> him the truth back then — it changed everything.",
+      opts:["not telling","to not tell","not to tell","don't tell"], correct:0,
+      why:"\"Regret\" + gerúndio no negativo usa <b>not + gerúndio</b>: \"regrets not telling\"." },
+    { level:"C1", tag:"Vocabulário avançado", stem:"Choose the word closest in meaning to \"reluctant\" in: \"He was reluctant to accept the new terms of the contract.\"",
+      opts:["unwilling","eager","confident","curious"], correct:0,
+      why:"\"Reluctant\" significa relutante, pouco disposto — sinônimo mais próximo é <b>unwilling</b>." },
   ];
 
   var Q = []; // the 12 questions drawn for this attempt
@@ -1085,8 +844,8 @@
 
   var el = {};
   ["stage","stageTop","bars","qTimerVal","btnPause",
-   "screen-gate","gatePassword","gateShowPass","gateError","btnGateEnter",
-   "screen-intro","btnStart","bestLine","statTime","statTotalTime","diffOptions","modeOptions",
+   "screen-gate","gateName","gateEmail","gatePassword","gateShowPass","gateError","btnGateEnter",
+   "screen-intro","btnStart","bestLine","statTime","statTotalTime","introMaxTime","modeOptions",
    "screen-quiz","qLevel","qTag","qStem","qOptions",
    "screen-review","rCards","rAnsweredCount",
    "qCount","btnNext",
@@ -1119,15 +878,8 @@
     QUESTION_TIME = seconds;
     el.statTime.textContent = "0:" + (seconds<10?"0":"") + seconds;
     el.statTotalTime.textContent = fmtMinSec(seconds*12);
+    el.introMaxTime.textContent = fmtMinSec(seconds*12);
   }
-
-  Array.prototype.forEach.call(el.diffOptions.children, function(btn){
-    btn.addEventListener("click", function(){
-      Array.prototype.forEach.call(el.diffOptions.children, function(b){ b.classList.remove("active"); });
-      btn.classList.add("active");
-      selectedDiff = btn.getAttribute("data-diff");
-    });
-  });
 
   Array.prototype.forEach.call(el.modeOptions.children, function(btn){
     btn.addEventListener("click", function(){
@@ -1241,11 +993,7 @@
   el.btnNext.addEventListener("click", advance);
 
   el.btnStart.addEventListener("click", function(){
-    var pool = ALL_Q.filter(function(q){ return q.diff===selectedDiff; });
-    var tempos = shuffle(pool.filter(function(q){ return q.cat==="tempo"; })).slice(0,8);
-    var preps  = shuffle(pool.filter(function(q){ return q.cat==="prep"; })).slice(0,2);
-    var vocs   = shuffle(pool.filter(function(q){ return q.cat==="voc"; })).slice(0,2);
-    Q = shuffle(tempos.concat(preps, vocs));
+    Q = shuffle(ALL_Q).slice(0,12);
     state = { i:0, answers:new Array(Q.length).fill(null) };
     ended = false;
     renderQuestion();
@@ -1349,8 +1097,8 @@
       el.breakdown.appendChild(row);
     });
 
-    var best = safeGet("quiz_tempos_best");
-    if(best===null || correctCount > parseInt(best,10)){ safeSet("quiz_tempos_best", String(correctCount)); best = String(correctCount); }
+    var best = safeGet("quiz_bordo_best");
+    if(best===null || correctCount > parseInt(best,10)){ safeSet("quiz_bordo_best", String(correctCount)); best = String(correctCount); }
     el.bestLine.hidden = false;
     el.bestLine.textContent = "Melhor resultado neste dispositivo: " + best + "/" + Q.length;
 
@@ -1381,7 +1129,7 @@
   setQuestionTime(QUESTION_TIME);
 
   (function initBest(){
-    var best = safeGet("quiz_tempos_best");
+    var best = safeGet("quiz_bordo_best");
     if(best!==null){ el.bestLine.hidden = false; el.bestLine.textContent = "Melhor resultado neste dispositivo: " + best + "/12"; }
   })();
 
@@ -1389,21 +1137,54 @@
   // NOTE: this is a simple client-side password, not real security — anyone who
   // opens the page's source/devtools can read GATE_PASSWORD below. It only stops
   // casual visitors from seeing the quiz, not a determined person. Change the
-  // password by editing the line below before publishing. Uses the same password
-  // as "Mentoria V1 - Estrutura & Vocabulário" for convenience.
+  // password by editing the line below before publishing.
   var GATE_PASSWORD = "mentoriaV12026!";
+  var APP_NAME = "Mentoria V1 - Estrutura & Vocabulário";
+
+  // Cole aqui a URL "/exec" do Apps Script (veja AppsScript-Code.gs) para que
+  // nome/e-mail de quem acessa sejam registrados numa planilha da Vivian.
+  // Enquanto o valor abaixo não for substituído, o envio é simplesmente ignorado.
+  var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygaSWu6mPdRoAUg433iaqq95d63AsHeu4PV_1lJJfpu4o5eWVuPLQUU8Z7zFU7ULca/exec";
+
+  function isValidEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function submitAccessLog(nome, email){
+    if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf("COLE_AQUI") !== -1) return;
+    try{
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ nome: nome, email: email, app: APP_NAME })
+      }).catch(function(){});
+    }catch(e){}
+  }
 
   function unlockGate(){
-    safeSet("tempos_v1_unlocked", "1");
+    safeSet("mentoria_v1_unlocked", "1");
     el["screen-gate"].hidden = true;
     el["screen-intro"].hidden = false;
   }
 
   function checkGatePassword(){
+    var nome = el.gateName.value.trim();
+    var email = el.gateEmail.value.trim();
+
+    if(!nome || !isValidEmail(email)){
+      el.gateError.textContent = "Preencha seu nome e um e-mail válido antes de entrar.";
+      el.gateError.hidden = false;
+      if(!nome){ el.gateName.focus(); } else { el.gateEmail.focus(); }
+      return;
+    }
+
     if(el.gatePassword.value.trim() === GATE_PASSWORD){
       el.gateError.hidden = true;
+      submitAccessLog(nome, email);
       unlockGate();
     } else {
+      el.gateError.textContent = "Senha incorreta. Tente de novo.";
       el.gateError.hidden = false;
       el.gatePassword.value = "";
       el.gatePassword.focus();
@@ -1417,7 +1198,7 @@
   el.gatePassword.addEventListener("keydown", function(e){ if(e.key==="Enter") checkGatePassword(); });
 
   (function initGate(){
-    if(safeGet("tempos_v1_unlocked") === "1"){
+    if(safeGet("mentoria_v1_unlocked") === "1"){
       el["screen-gate"].hidden = true;
       el["screen-intro"].hidden = false;
     }

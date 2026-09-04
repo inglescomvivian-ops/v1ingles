@@ -1,7 +1,7 @@
 {
-  "name": "Mentoria V1 - Tempos Verbais",
-  "short_name": "Tempos Verbais",
-  "description": "Prática cronometrada de tempos verbais, preposições e vocabulário em inglês, com 3 níveis de dificuldade — Vivian Bispo, Teacher Mentora de Comissários de Voo.",
+  "name": "Mentoria V1 - Vivian Bispo",
+  "short_name": "Mentoria V1",
+  "description": "Prática cronometrada de estrutura e vocabulário em inglês, com Vivian Bispo — Teacher Mentora de Comissários de Voo.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
